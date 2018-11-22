@@ -1,0 +1,79 @@
+<resources>
+
+    <!-- App Strings -->
+    <string name="app_name">Riddler</string>
+    <string name="continue_button">Tap to Continue</string>
+
+    <!-- Toast Strings -->
+    <string name="hints_expended">This question has no more hints.</string>
+
+    <string name="player_file">Player.json</string>
+    <string name="questions_file">Questions-En.json</string>
+
+    <!-- Menu Strings -->
+    <string name="start_button">Start</string>
+    <string name="resume_button">Continue</string>
+    <string name="default_version">v1.0</string>
+
+    <!-- General Buttons -->
+    <string name="back_button">Back</string>
+    <string name="watch_ad_button">Watch Ad</string>
+
+
+    <!-- Consent Dialog Strings -->
+    <!-- Main Dialog -->
+    <string name="consent_title">Personalize Your Ad Experience</string>
+
+    <string name="consent_description">We keep this app free by showing ads. By consenting to
+        personalized ads you will see ads that are more relevant to you. Our partners will collect
+        data and use a unique identifier on your device to show you ads.</string>
+
+    <string name="consent_description_link">Learn how Riddler and our partners collect and use data.</string>
+
+    <string name="consent_meaning">By accepting you are confirming that you would like a
+        personalized ad experience. You can change your choice anytime in the app settings.</string>
+
+    <!-- Decline Dialog-->
+    <string name="consent_decline_description">We\'ll partner with Google and use a unique
+        identifier on your device to respect your data usage choice. You can change your choice
+        anytime in the app settings.</string>
+
+    <string name="riddler_privacy_policy">
+        <a href="http://www.google.com">How Riddler uses your data</a></string>
+
+    <!-- More Info Dialog -->
+    <string name="more_info_description">You can change your choice anytime in the app settings.
+        Learn how our partners collect and use data:</string>
+
+    <!-- Dialog Buttons -->
+    <string name="consent_accept_button">Accept</string>
+    <string name="consent_decline_button">Decline</string>
+
+    <!-- Hint Dialog -->
+    <string name="hint_title">You\'ve run out of Hints!</string>
+    <string name="hint_description">Why not watch an ad to unlock 5 more hints?</string>
+
+    <!-- Skip Dialog -->
+    <string name="skip_title">Completely Stuck?</string>
+    <string name="skip_description">Why not watch an ad to skip to the next riddle?</string>
+
+    <!-- Question Strings -->
+    <string name="default_question_progress">67/100</string>
+    <string name="default_question">What has a spine but has never lived?</string>
+
+    <string name="skip_button">Skip</string>
+    <string name="hints_button">Hints</string>
+
+    <string name="input_hint">Answer</string>
+
+    <!-- Correct Strings -->
+    <string name="correct_label">Correct</string>
+
+
+    <!-- Completion Strings -->
+    <string name="congratulations_label">Congratulations</string>
+    <string name="you_have_label">you have completed</string>
+
+
+
+</resources>

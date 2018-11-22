@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#2c3e50</color>
+    <color name="colorSecondary">#273748</color>
+    <color name="colorAccent">#10ac84</color>
+    <color name="colorAccentReduced">#8010AC84</color>
+
+    <color name="buttonPrimary">#019875</color>
+    <color name="buttonPressed">#006850</color>
+    <color name="buttonDisabled">#535c68</color>
+
+    <color name="buttonGrayedPrimary">#737f8c</color>
+    <color name="buttonGrayedPressed">#607D8B</color>
+    <color name="buttonGrayedDisabled">#535c68</color>
+
+
+</resources>

@@ -1,0 +1,37 @@
+<resources>
+
+    <!-- Base application theme. -->
+    <style name="GameTheme" parent="Theme.AppCompat.Light.NoActionBar">
+        <!-- Customize your theme here. -->
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimary</item>
+        <item name="colorAccent">@color/colorAccent</item>
+
+        <item name="android:windowActionBar">false</item>
+        <item name="android:windowNoTitle">true</item>
+
+    </style>
+
+    <style name="questionProgress" parent="android:Widget.ProgressBar.Horizontal">
+        <item name="android:indeterminateOnly">false</item>
+        <item name="android:progressDrawable">@drawable/pb_progress</item>
+        <item name="android:minHeight">0dp</item>
+        <item name="android:maxHeight">10dp</item>
+    </style>
+
+
+    <style name="infoToast">
+        <item name="stTextColor">@color/colorSecondary</item>
+        <item name="stFont">@font/abel</item>
+        <item name="stColorBackground">@color/colorAccent</item>
+        <item name="stLength">SHORT</item>
+        <item name="stRadius">2dp</item>
+    </style>
+
+
+    <style name="dialogTheme">
+        <item name="android:windowEnterAnimation">@anim/slide_left</item>
+        <item name="android:windowExitAnimation">@anim/slide_right</item>
+    </style>
+
+</resources>
