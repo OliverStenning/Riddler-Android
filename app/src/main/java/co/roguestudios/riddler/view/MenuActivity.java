@@ -10,7 +10,6 @@ import android.view.WindowManager;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
-import com.google.ads.consent.ConsentForm;
 import com.google.ads.consent.ConsentInfoUpdateListener;
 import com.google.ads.consent.ConsentInformation;
 import com.google.ads.consent.ConsentStatus;
@@ -37,12 +36,12 @@ public class MenuActivity extends AppCompatActivity {
 
         prefManager = new PrefManager(this);
 
-        // Update sound and music enabled icons
+        //update sound and music enabled icons
         soundButton = findViewById(R.id.soundButton);
         musicButton = findViewById(R.id.musicButton);
         updateUI();
 
-        // Update version text
+        //update version text
         TextView versionText = findViewById(R.id.versionText);
         try {
             PackageInfo pInfo = this.getPackageManager().getPackageInfo(getPackageName(), 0);
@@ -53,7 +52,7 @@ public class MenuActivity extends AppCompatActivity {
         }
 
 
-        // Update consent status
+        //update consent status
         final Context context = this;
         ConsentInformation consentInformation = ConsentInformation.getInstance(context);
         String[] publisherIds = {"pub-4605466962808569"};
@@ -67,11 +66,12 @@ public class MenuActivity extends AppCompatActivity {
                 System.out.println(consentStatus.toString());
                 System.out.println((System.nanoTime() - time) / 1000000);
 
-                // Check whether consent needs to be updated
+                //check whether consent needs to be updated
                 if (ConsentInformation.getInstance(context).isRequestLocationInEeaOrUnknown() || CONSENT_CHECK) {
-                    // Create dialog to collect consent status if unknown
+                    //create dialog to collect consent status if unknown
                     if (consentStatus == ConsentStatus.UNKNOWN || CONSENT_CHECK) {
                         ConsentDialog consentDialog = new ConsentDialog();
+                        consentDialog.setCancelable(false); //stop dialog from closing when user touches outside dialog
                         consentDialog.show(getSupportFragmentManager(), "ConsentDialogFragment");
                     }
                 }
@@ -89,24 +89,20 @@ public class MenuActivity extends AppCompatActivity {
 
     public void updateUI() {
 
-        //Update sound button image
+        //update sound button image
         if (prefManager.hasSound()) soundButton.setImageDrawable(ResourcesCompat.getDrawable(getResources(), R.drawable.ic_volume_on_36dp, null));
         else soundButton.setImageDrawable(ResourcesCompat.getDrawable(getResources(), R.drawable.ic_volume_off_36dp, null));
 
-        //Update music button image
+        //update music button image
         if (prefManager.hasMusic()) musicButton.setImageDrawable(ResourcesCompat.getDrawable(getResources(), R.drawable.ic_music_on_36dp, null));
         else musicButton.setImageDrawable(ResourcesCompat.getDrawable(getResources(), R.drawable.ic_music_off_36dp, null));
 
     }
 
-    public void clickStart(View view) {
-
-        startActivity(new Intent(this, QuestionActivity.class));
-
-    }
+    public void clickStart(View view) { startActivity(new Intent(this, QuestionActivity.class)); }
 
     public void clickSettings(View view) {
-
+        //TODO create settings menu
     }
 
     public void clickSound(View view) {

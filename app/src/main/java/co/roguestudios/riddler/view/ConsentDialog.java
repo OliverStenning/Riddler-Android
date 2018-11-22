@@ -27,31 +27,27 @@ public class ConsentDialog extends DialogFragment {
         View dialogView = inflater.inflate(R.layout.dialog_consent, null);
         builder.setView(dialogView);
 
-        List<AdProvider> adProviders = ConsentInformation.getInstance(getActivity()).getAdProviders();
-        for (AdProvider adProvider : adProviders) {
-            System.out.println(adProvider.getName());
-            System.out.println(adProvider.getId());
-            System.out.println(adProvider.getPrivacyPolicyUrlString());
-        }
-
-
-        // Update consent to PERSONALISED and close dialog
+        //update consent to PERSONALISED and close dialog
         Button acceptButton = dialogView.findViewById(R.id.consentAcceptButton);
         acceptButton.setOnClickListener(view -> {
             ConsentInformation.getInstance(getActivity()).setConsentStatus(ConsentStatus.PERSONALIZED);
             dismiss();
         });
 
-        // Display decline dialog when user clicks decline
+        //display decline dialog when user clicks decline
         Button declineButton = dialogView.findViewById(R.id.consentDeclineButton);
         declineButton.setOnClickListener(view ->  {
             ConsentDeclineDialog declineDialog = new ConsentDeclineDialog();
+            declineDialog.setCancelable(false); //stop dialog from closing when user touches outside dialog
             declineDialog.show(getFragmentManager(), "ConsentDeclineDialogFragment");
         });
 
+        //display more info dialog when user clicks link
         TextView moreInfoLink = dialogView.findViewById(R.id.consentMoreInfoText);
         moreInfoLink.setOnClickListener(view -> {
-            System.out.println("More Info Clicked!");
+            ConsentMoreInfoDialog moreInfoDialog = new ConsentMoreInfoDialog();
+            moreInfoDialog.setCancelable(false); //stop dialog from closing when user touches outside dialog
+            moreInfoDialog.show(getFragmentManager(), "ConsentMoreInfoDialogFragment");
         });
 
         return builder.create();
