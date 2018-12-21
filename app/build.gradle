@@ -3,7 +3,7 @@ apply plugin: 'com.android.application'
 android {
     compileSdkVersion 28
     defaultConfig {
-        applicationId "co.roguestudios.riddler"
+        applicationId "co.stenning.riddler"
         minSdkVersion 19
         targetSdkVersion 27
         versionCode 1
@@ -28,16 +28,50 @@ android {
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
-    implementation 'androidx.appcompat:appcompat:1.0.2'
-    implementation 'androidx.browser:browser:1.0.0'
-    implementation 'androidx.media:media:1.0.0'
-    implementation 'androidx.legacy:legacy-support-v4:1.0.0'
-    implementation 'androidx.constraintlayout:constraintlayout:2.0.0-alpha2'
-    implementation 'com.google.android.gms:play-services-ads:15.0.1'
-    implementation "androidx.lifecycle:lifecycle-extensions:2.0.0"
-    implementation 'com.google.code.gson:gson:2.8.0'
-    implementation 'com.muddzdev:styleabletoast:2.2.0'
-    implementation 'com.google.android.ads.consent:consent-library:1.0.6'
+
+    def appCompat = "1.0.2"
+    def constraintLayout = "2.0.0-alpha2"
+    def lifecycle = "2.0.0"
+    def lottie = "2.8.0"
+    def GSON = "2.8.0"
+    def mobileAds = "16.0.0"
+    def auth = "16.0.1"
+    def gamesServices = "16.0.0"
+    def consent = "1.0.6"
+    def styleableToast = "2.2.0"
+    def legacy = "1.0.0"
+
+    //AppCompat
+    implementation "androidx.appcompat:appcompat:$appCompat"
+
+    //ConstraintLayout
+    implementation "androidx.constraintlayout:constraintlayout:$constraintLayout"
+
+    //ViewModel & LiveData
+    implementation "androidx.lifecycle:lifecycle-extensions:$lifecycle"
+
+    //Lottie
+    implementation "com.airbnb.android:lottie:$lottie"
+
+    //GSON
+    implementation "com.google.code.gson:gson:$GSON"
+
+    //Ads & Play Services
+    implementation "com.google.android.gms:play-services-ads:$mobileAds"
+
+    implementation "com.google.android.gms:play-services-auth:$auth"
+    implementation "com.google.android.gms:play-services-games:$gamesServices"
+
+    //Consent
+    implementation "com.google.android.ads.consent:consent-library:$consent"
+
+    //Styleable Toast
+    implementation "com.muddzdev:styleabletoast:$styleableToast"
+
+    //Legacy Support
+    implementation "androidx.legacy:legacy-support-v4:$legacy"
+
+
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'androidx.test:runner:1.1.0'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.1.0'

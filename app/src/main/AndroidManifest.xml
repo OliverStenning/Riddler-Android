@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-          package="co.roguestudios.riddler">
+          package="co.stenning.riddler">
 
     <application
         android:allowBackup="true"
@@ -9,7 +9,12 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/GameTheme">
-        <activity android:name=".view.MenuActivity">
+        <meta-data android:name="com.google.android.gms.games.APP_ID"
+            android:value="@string/app_id" />
+        <meta-data android:name="com.google.android.gms.version"
+            android:value="@integer/google_play_services_version"/>
+        <activity android:name="co.stenning.riddler.view.MenuActivity"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
 
@@ -21,11 +26,14 @@
             android:name="preloaded_fonts"
             android:resource="@array/preloaded_fonts"/>
 
-        <activity android:name=".view.QuestionActivity">
+        <activity android:name="co.stenning.riddler.view.QuestionActivity"
+            android:screenOrientation="portrait">
         </activity>
-        <activity android:name=".view.CorrectActivity">
+        <activity android:name="co.stenning.riddler.view.CorrectActivity"
+            android:screenOrientation="portrait">
         </activity>
-        <activity android:name=".view.CompletionActivity">
+        <activity android:name="co.stenning.riddler.view.CompletionActivity"
+            android:screenOrientation="portrait">
         </activity>
     </application>
 
