@@ -2,6 +2,8 @@ package co.stenning.riddler.view;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -28,15 +30,18 @@ public class ConsentDeclineDialog extends DialogFragment {
         View dialogView = inflater.inflate(R.layout.dialog_consent_decline, null);
         builder.setView(dialogView);
 
-        // Remove underline from privacy policy link
-        TextView privacyPolicyText = dialogView.findViewById(R.id.consentDeclinePrivacyPolicyText);
-        URLSpanNoUnderline.stripUnderlines(privacyPolicyText);
+        //Remove underline from privacy policy link
+        Button privacyPolicyButton = dialogView.findViewById(R.id.consentDeclinePrivacyPolicyButton);
+        privacyPolicyButton.setOnClickListener(view -> {
+            Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(getString(R.string.privacy_policy)));
+            startActivity(browserIntent);
+        });
 
-        // Pass back accept click to activity
+        //Pass back accept click to activity
         Button acceptButton = dialogView.findViewById(R.id.consentDeclineAcceptButton);
         acceptButton.setOnClickListener(view -> listener.onConsentDeclineAcceptClick(ConsentDeclineDialog.this));
 
-        // Pass back back click to activity
+        //Pass back back click to activity
         Button backButton = dialogView.findViewById(R.id.consentDeclineBackButton);
         backButton.setOnClickListener(view -> dismiss());
 

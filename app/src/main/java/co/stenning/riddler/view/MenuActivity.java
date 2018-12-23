@@ -1,6 +1,7 @@
 package co.stenning.riddler.view;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
@@ -21,32 +22,44 @@ import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.auth.api.signin.GoogleSignInResult;
 import com.google.android.gms.games.Games;
 import com.google.android.gms.games.GamesClient;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.muddzdev.styleabletoast.StyleableToast;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.DialogFragment;
 import co.stenning.riddler.R;
 import co.stenning.riddler.classes.PrefManager;
 
-public class MenuActivity extends AppCompatActivity {
+public class MenuActivity extends AppCompatActivity implements DialogInterface.OnDismissListener {
 
+    /* Google Play Games Services */
     private GoogleSignInClient signInClient;
     private GoogleSignInAccount signedInAccount;
+    private GamesClient gamesClient;
 
+    //arbitrary numbers to determine activity result origin
     private static final int RC_SIGN_IN = 9001;
     private static final int RC_ACHIEVEMENT_UI = 9003;
+    private static final int RC_LEADERBOARD_UI = 9004;
+    public static final String ACCOUNT_PARCEL = "account";
 
-    private static final String ACCOUNT_PARCEL = "account";
-
+    /* Consent */
     private final boolean CONSENT_CHECK = false;
+    private PrefManager prefManager;
+
+    /* Settings Dialog */
+    private SettingsDialog settingsDialog;
+    private boolean isSettingsDisplayed;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
+                WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_menu);
+
+        prefManager = new PrefManager(this);
 
         //update version text
         TextView versionText = findViewById(R.id.versionText);
@@ -59,22 +72,176 @@ public class MenuActivity extends AppCompatActivity {
         }
 
         //update consent status
+        updateConsent(false);
+
+        //google play games sign in
+        signIn();
+
+        //create and update settings dialog with correct button states
+        settingsDialog = new SettingsDialog();
+        settingsDialog.setPlaySignedIn(isSignedIn());
+
+    }
+
+    /* Google Play Games Services Methods */
+    private boolean isSignedIn() {
+        return GoogleSignIn.getLastSignedInAccount(this) != null;
+    }
+
+    private void signIn() {
+        //get the sign in client and configure for games
+        signInClient = GoogleSignIn.getClient(this, new GoogleSignInOptions
+                .Builder(GoogleSignInOptions.DEFAULT_GAMES_SIGN_IN).build());
+
+        //try to sign user in silently
+        signInSilently();
+
+        //if silent sign in doesn't work display UI sign in
+        if (!isSignedIn())
+            startActivityForResult(signInClient.getSignInIntent(), RC_SIGN_IN);
+
+    }
+
+    private void signInSilently() {
+        signInClient.silentSignIn().addOnCompleteListener(this,
+                task -> {
+                    if (task.isSuccessful()) {
+                        signedInAccount = task.getResult();
+                        settingsDialog.setPlaySignedIn(true);
+                        updateSettingsIfDisplaying();
+                    } else {
+                        settingsDialog.setPlaySignedIn(false);
+                        updateSettingsIfDisplaying();
+                    }
+                });
+    }
+
+    private boolean signInIfNotAlready() {
+        if (!isSignedIn()) {
+            signIn();
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    private void signOut() {
+        signInClient.signOut().addOnCompleteListener(this,
+                task -> {
+                    StyleableToast.makeText(this, "Signed out", R.style.infoToast).show();
+                    settingsDialog.setPlaySignedIn(false);
+                    updateSettingsIfDisplaying();
+                });
+    }
+
+    private void setPopUpView() {
+        gamesClient = Games.getGamesClient(this, signedInAccount);
+        gamesClient.setViewForPopups(findViewById(R.id.gps_popup_welcome));
+    }
+
+    //return from sign in activity
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == RC_SIGN_IN) {
+            GoogleSignInResult result = Auth.GoogleSignInApi.getSignInResultFromIntent(data);
+            if (result.isSuccess()) {
+                signedInAccount = result.getSignInAccount();
+                settingsDialog.setPlaySignedIn(true);
+                updateSettingsIfDisplaying();
+                setPopUpView();
+            } else {
+                StyleableToast.makeText(this, getString(R.string.sign_in_failed), R.style.errorToast).show();
+                settingsDialog.setPlaySignedIn(false);
+                updateSettingsIfDisplaying();
+            }
+        }
+    }
+
+    /* Menu Activity Button Methods */
+    public void clickStart(View view) {
+        Intent intent = new Intent(this, QuestionActivity.class);
+        intent.putExtra(ACCOUNT_PARCEL, signedInAccount);
+        startActivity(intent);
+    }
+
+    public void clickSettings(View view) {
+        //create settings dialog
+        isSettingsDisplayed = true;
+        settingsDialog.show(getSupportFragmentManager(), "SettingsDialogFragment");
+        settingsDialog.setSettingsDialogListener(new SettingsDialog.SettingsDialogListener() {
+            @Override
+            public void onPlayGamesClick(DialogFragment dialog) {
+                if (isSignedIn())
+                    signOut();
+                else
+                    signIn();
+            }
+            @Override
+            public void onPrivacySettingsClick(DialogFragment dialog) {
+                settingsDialog.dismiss();
+                updateConsent(true);
+            }
+        });
+    }
+
+    public void clickAchievement(View view) {
+        //sign in if not already signed in
+        if (!signInIfNotAlready()) {
+            //if already signed in display achievements
+            Games.getAchievementsClient(this,
+                    GoogleSignIn.getLastSignedInAccount(this))
+                    .getAchievementsIntent().addOnSuccessListener(
+                        intent -> startActivityForResult(intent, RC_ACHIEVEMENT_UI)
+            );
+        }
+    }
+
+    public void clickLeaderboard(View view) {
+        //sign in if not already signed in
+        if (!signInIfNotAlready()) {
+            //if already signed in display leaderboard
+            Games.getLeaderboardsClient(this,
+                    GoogleSignIn.getLastSignedInAccount(this))
+                    .getLeaderboardIntent(getString(R.string.leaderboard_high_scores))
+                    .addOnSuccessListener(
+                            intent -> startActivityForResult(intent, RC_LEADERBOARD_UI)
+                    );
+        }
+    }
+
+    /* Updating Settings Buttons */
+    private void updateSettingsIfDisplaying() {
+        if (isSettingsDisplayed)
+            settingsDialog.updateButtons();
+    }
+
+    @Override
+    public void onDismiss(final DialogInterface dialog) {
+        //update whether settings is being displayed
+        isSettingsDisplayed = false;
+    }
+
+    /* Consent Dialog */
+    private void updateConsent(boolean forcedUpdate) {
         final Context context = this;
         ConsentInformation consentInformation = ConsentInformation.getInstance(context);
         String[] publisherIds = {"pub-4605466962808569"};
+        //TODO remove before release
         consentInformation.addTestDevice("8F85985E1F138565EDB3AD4BFCE7C52D");
-
         consentInformation.requestConsentInfoUpdate(publisherIds, new ConsentInfoUpdateListener() {
             @Override
             public void onConsentInfoUpdated(ConsentStatus consentStatus) {
-
                 //check whether consent needs to be updated
-                if (ConsentInformation.getInstance(context).isRequestLocationInEeaOrUnknown() || CONSENT_CHECK) {
+                if (ConsentInformation.getInstance(context).isRequestLocationInEeaOrUnknown() || forcedUpdate || CONSENT_CHECK) {
                     //create dialog to collect consent status if unknown
-                    if (consentStatus == ConsentStatus.UNKNOWN || CONSENT_CHECK) {
+                    if (consentStatus == ConsentStatus.UNKNOWN || forcedUpdate || CONSENT_CHECK) {
                         ConsentDialog consentDialog = new ConsentDialog();
                         consentDialog.setCancelable(false); //stop dialog from closing when user touches outside dialog
                         consentDialog.show(getSupportFragmentManager(), "ConsentDialogFragment");
+                        consentDialog.setConsentDialogListener(dialog -> {
+                            prefManager.setConsentPersonalised(false);
+                        });
                     }
                 }
             }
@@ -84,59 +251,6 @@ public class MenuActivity extends AppCompatActivity {
                 System.out.println(reason);
             }
         });
-
-        //Google play games sign in
-        signInClient = GoogleSignIn.getClient(this, new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_GAMES_SIGN_IN).build());
-        startActivityForResult(signInClient.getSignInIntent(), RC_SIGN_IN);
-    }
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == RC_SIGN_IN) {
-            GoogleSignInResult result = Auth.GoogleSignInApi.getSignInResultFromIntent(data);
-            if (result.isSuccess()) {
-                System.out.println("Signed in");
-                // The signed in account is stored in the result.
-                signedInAccount = result.getSignInAccount();
-                GamesClient gamesClient = Games.getGamesClient(this, signedInAccount);
-                gamesClient.setViewForPopups(findViewById(R.id.gps_popup_welcome));
-            } else {
-                System.out.println("Didn't sign in");
-                String message = result.getStatus().getStatusMessage();
-                if (message == null || message.isEmpty()) {
-                   message = "Sign in error.";
-                }
-                new AlertDialog.Builder(this).setMessage(message).setNeutralButton(android.R.string.ok, null).show();
-            }
-        }
-    }
-
-    private boolean isSignedIn() {
-        return GoogleSignIn.getLastSignedInAccount(this) != null;
-    }
-
-    public void clickStart(View view) {
-        Intent intent = new Intent(this, QuestionActivity.class);
-        intent.putExtra(ACCOUNT_PARCEL, signedInAccount);
-        startActivity(intent);
-    }
-
-    public void clickSettings(View view) {
-        //TODO create settings menu
-    }
-
-    public void clickAchievement(View view) {
-        if(isSignedIn())
-            Games.getAchievementsClient(this, GoogleSignIn.getLastSignedInAccount(this)).getAchievementsIntent().addOnSuccessListener(intent -> startActivityForResult(intent, RC_ACHIEVEMENT_UI));
-    }
-
-    public void clickLeaderboard(View view) {
-
-    }
-
-    public void clickSignOut(View view) {
-        signInClient.signOut().addOnCompleteListener(this, task -> Toast.makeText(MenuActivity.this, "Signed out", Toast.LENGTH_LONG).show());
     }
 
 }

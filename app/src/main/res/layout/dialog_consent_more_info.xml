@@ -33,28 +33,30 @@
         android:layout_marginEnd="24dp"
         android:layout_marginBottom="16dp"
         android:divider="@null"
-        app:layout_constraintBottom_toTopOf="@+id/consentMoreInfoLinkText"
+        app:layout_constraintBottom_toTopOf="@+id/consentMoreInfoLinkButton"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView">
 
     </ListView>
 
-    <TextView
-        android:id="@+id/consentMoreInfoLinkText"
+    <Button
+        android:id="@+id/consentMoreInfoLinkButton"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="24dp"
         android:layout_marginEnd="24dp"
         android:layout_marginBottom="16dp"
+        android:background="@null"
         android:fontFamily="@font/abel"
         android:text="@string/riddler_privacy_policy"
         android:textAlignment="center"
+        android:textAllCaps="false"
         android:textColor="@color/colorAccentReduced"
         android:textSize="18sp"
         app:layout_constraintBottom_toTopOf="@+id/consentMoreInfoBackButton"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"/>
+        app:layout_constraintStart_toStartOf="parent" />
 
     <Button
         android:id="@+id/consentMoreInfoBackButton"

@@ -16,6 +16,12 @@ import co.stenning.riddler.R;
 
 public class ConsentDialog extends DialogFragment {
 
+    public interface ConsentDialogListener {
+        void onConsentDecline(DialogFragment dialog);
+    }
+
+    private ConsentDialogListener listener;
+
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
@@ -37,6 +43,12 @@ public class ConsentDialog extends DialogFragment {
             ConsentDeclineDialog declineDialog = new ConsentDeclineDialog();
             declineDialog.setCancelable(false); //stop dialog from closing when user touches outside dialog
             declineDialog.show(getFragmentManager(), "ConsentDeclineDialogFragment");
+            declineDialog.setConsentDeclineDialogListener(dialog ->  {
+                    declineDialog.dismiss();
+                    dismiss();
+                    ConsentInformation.getInstance(getActivity()).setConsentStatus(ConsentStatus.NON_PERSONALIZED);
+                    listener.onConsentDecline(ConsentDialog.this);
+                });
         });
 
         //display more info dialog when user clicks link
@@ -50,4 +62,7 @@ public class ConsentDialog extends DialogFragment {
         return builder.create();
     }
 
+    public void setConsentDialogListener(ConsentDialogListener listener) {
+        this.listener = listener;
+    }
 }

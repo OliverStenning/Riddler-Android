@@ -14,8 +14,6 @@ public class PrefManager {
 
     //Shared preferences keys
     private static final String CONSENT_PERSONALISED = "consent-personalised";
-    private static final String SOUND = "sound";
-    private static final String MUSIC = "music";
 
     public PrefManager(Context context) {
         this.context = context;
@@ -34,22 +32,6 @@ public class PrefManager {
     }
     public boolean hasConsentPersonalised() {
         return preferences.getBoolean(CONSENT_PERSONALISED, true);
-    }
-
-    public void setSound(boolean sound) {
-        editor.putBoolean(SOUND, sound);
-        editor.commit();
-    }
-    public boolean hasSound() {
-        return preferences.getBoolean(SOUND, true);
-    }
-
-    public void setMusic(boolean music) {
-        editor.putBoolean(MUSIC, music);
-        editor.commit();
-    }
-    public boolean hasMusic() {
-        return preferences.getBoolean(MUSIC, true);
     }
 
 }

@@ -32,8 +32,11 @@ public class ConsentMoreInfoDialog extends DialogFragment {
         builder.setView(dialogView);
 
         //remove underline from link
-        TextView moreInfoText = dialogView.findViewById(R.id.consentMoreInfoLinkText);
-        URLSpanNoUnderline.stripUnderlines(moreInfoText);
+        Button moreInfoButton = dialogView.findViewById(R.id.consentMoreInfoLinkButton);
+        moreInfoButton.setOnClickListener(view -> {
+            Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(getString(R.string.privacy_policy)));
+            startActivity(browserIntent);
+        });
 
         //make back button close dialog
         Button backButton = dialogView.findViewById(R.id.consentMoreInfoBackButton);

@@ -6,11 +6,14 @@ public class Player {
 
     private int position;
     private int hints;
+    private long questionTimeStarted;
     private int questionHintsUsed;
+    private int questionIncorrectGuesses;
     private int questionsSinceAd;
     private boolean ratingAsked;
 
     //Player stats
+    private int score;
     private long startTime;
     private int totalIncorrectGuesses;
     private int totalHintsUsed;
@@ -48,8 +51,12 @@ public class Player {
     public void incrementPosition() {
         this.position += 1;
     }
-    public void incrementTotalIncorrectGuesses() {
+    public void incrementIncorrectGuesses() {
         this.totalIncorrectGuesses += 1;
+        this.questionIncorrectGuesses += 1;
+    }
+    public void addScore(int score) {
+        this.score += score;
     }
 
 
@@ -67,11 +74,25 @@ public class Player {
         this.hints = hints;
     }
 
+    public long getQuestionTimeStarted() {
+        return questionTimeStarted;
+    }
+    public void setQuestionTimeStarted(long questionTimeStarted) {
+        this.questionTimeStarted = questionTimeStarted;
+    }
+
     public int getQuestionHintsUsed() {
         return questionHintsUsed;
     }
     public void setQuestionHintsUsed(int questionHintsUsed) {
         this.questionHintsUsed = questionHintsUsed;
+    }
+
+    public int getQuestionIncorrectGuesses() {
+        return questionIncorrectGuesses;
+    }
+    public void setQuestionIncorrectGuesses(int questionIncorrectGuesses) {
+        this.questionIncorrectGuesses = questionIncorrectGuesses;
     }
 
     public int getQuestionsSinceAd() {
@@ -86,6 +107,13 @@ public class Player {
     }
     public void setRatingAsked(boolean ratingAsked) {
         this.ratingAsked = ratingAsked;
+    }
+
+    public int getScore() {
+        return score;
+    }
+    public void setScore(int score) {
+        this.score = score;
     }
 
     public long getStartTime() {

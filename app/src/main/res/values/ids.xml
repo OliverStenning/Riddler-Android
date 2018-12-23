@@ -30,4 +30,6 @@ Save this file as res/values/games-ids.xml in your project.
     <string name="achievement_riddle_master" translatable="false">CgkI8MWN-eUWEAIQBg</string>
     <!-- achievement Defeat the Riddler! -->
     <string name="achievement_defeat_the_riddler" translatable="false">CgkI8MWN-eUWEAIQBw</string>
+    <!-- leaderboard High Scores -->
+    <string name="leaderboard_high_scores" translatable="false">CgkI8MWN-eUWEAIQDg</string>
 </resources>

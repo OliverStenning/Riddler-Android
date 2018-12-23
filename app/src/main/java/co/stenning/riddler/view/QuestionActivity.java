@@ -24,6 +24,8 @@ import com.google.android.gms.games.Games;
 import com.google.android.gms.games.GamesClient;
 import com.muddzdev.styleabletoast.StyleableToast;
 
+import java.util.ArrayList;
+
 import co.stenning.riddler.R;
 import co.stenning.riddler.classes.Player;
 import co.stenning.riddler.classes.Question;
@@ -33,14 +35,16 @@ public class QuestionActivity extends AppCompatActivity {
     private static final int QUESTIONS_BETWEEN_ADS = 1;
     private static final int CORRECT_ACTIVITY = 1;
 
-    private static final String ACCOUNT_PARCEL = "account";
-
+    /* Google Play Games Sign in */
     private GoogleSignInAccount signedInAccount;
     private GamesClient gamesClient;
     private AchievementsClient achievementsClient;
+    public static final String SCORE_EXTRA = "score";
 
+    /* Game Operation */
     private QuestionModel questionModel;
 
+    /* User Interface */
     private ProgressBar questionProgress;
     private TextView questionProgressText;
     private TextView questionText;
@@ -49,20 +53,24 @@ public class QuestionActivity extends AppCompatActivity {
     private EditText answerInput;
     private TextView hintText;
 
+    /* Ads */
+    
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_question);
 
-        signedInAccount = getIntent().getParcelableExtra(ACCOUNT_PARCEL);
+        //if signed in on google play setup achievements and leaderboards
+        signedInAccount = getIntent().getParcelableExtra(MenuActivity.ACCOUNT_PARCEL);
         if (signedInAccount != null) {
-            System.out.println("Accounted parsed");
             gamesClient = Games.getGamesClient(this, signedInAccount);
             gamesClient.setViewForPopups(findViewById(R.id.gps_popup));
             achievementsClient = Games.getAchievementsClient(this, signedInAccount);
         }
 
+        //get references to UI
         questionProgress = findViewById(R.id.questionProgress);
         questionProgressText = findViewById(R.id.questionProgressText);
         questionText = findViewById(R.id.questionText);
@@ -71,7 +79,7 @@ public class QuestionActivity extends AppCompatActivity {
         answerInput = findViewById(R.id.answerInput);
         hintText = findViewById(R.id.hintText);
 
-        //Setup view model
+        //setup view model
         questionModel = ViewModelProviders.of(this).get(QuestionModel.class);
         questionModel.loadPlayer(this);
         questionModel.loadQuestions(this);
@@ -87,17 +95,22 @@ public class QuestionActivity extends AppCompatActivity {
         };
         questionModel.getPlayer().observe(this, playerObserver);
 
-        //Override keyboard enter method
+        //override keyboard enter method
         answerInput.setOnEditorActionListener((v, actionId, event) -> {
             if (actionId == EditorInfo.IME_ACTION_DONE) clickEnter(null);
             return true;
         });
 
+        //set question start time if first start
+        questionModel.setFirstStartTime();
+
     }
 
+    /* Question Activity Button Methods */
     public void clickBack(View view) {
         finish();
     }
+
     public void clickSkip(View view) {
         SkipDialog skipDialog = new SkipDialog();
         skipDialog.show(getSupportFragmentManager(), "SkipDialogFragment");
@@ -107,6 +120,7 @@ public class QuestionActivity extends AppCompatActivity {
         });
 
     }
+
     public void clickHint(View view) {
         hideKeyboard();
         Player player = questionModel.getPlayer().getValue();
@@ -126,32 +140,76 @@ public class QuestionActivity extends AppCompatActivity {
 
         }
     }
+
     public void clickEnter(View view) {
         hideKeyboard();
         //TODO make checks more generous
         if (!questionModel.guess(answerInput.getText().toString())) {
-            //Answer is wrong
+            /* Answer is wrong */
+            //shake EditText to show its wrong
             answerInput.setAnimation(AnimationUtils.loadAnimation(this, R.anim.shake));
-        } else {
-            //Answer is correct
+
+            //clear answer EditText
             answerInput.setText("");
-            startActivityForResult(new Intent(this, CorrectActivity.class), CORRECT_ACTIVITY);
+        } else {
+            /* Answer is correct */
+            //clear answer EditText
+            answerInput.setText("");
+
+            //update score and submit to leaderboard
+            int questionScore = updateScore();
+
+            //pass question score to Correct Activity
+            Intent intent = new Intent(this, CorrectActivity.class);
+            intent.putExtra(SCORE_EXTRA, questionScore);
+            startActivityForResult(intent, CORRECT_ACTIVITY);
             overridePendingTransition(0, 0);
         }
     }
 
-    private void checkForProgressAchievements() {
-        if (questionModel.getPlayer().getValue().getPosition() == 10) {
-            achievementsClient.unlock(getString(R.string.achievement_youre_a_natural));
-        } else if (questionModel.getPlayer().getValue().getPosition() == 20) {
-            achievementsClient.unlock(getString(R.string.achievement_riddle_lover));
+    /* Play Games Achievements & Leaderboards */
+    private boolean isSignedIn() {
+        return GoogleSignIn.getLastSignedInAccount(this) != null;
+    }
+
+    private void updateProgressAchievements() {
+        //check if user is signed in
+        if (isSignedIn()) {
+            //get achievement id
+            ArrayList<Integer> achievementIds = questionModel.checkProgressAchievements();
+
+            //if there are achievements to unlock
+            if (!achievementIds.isEmpty()) {
+                for (int i = 0; i < achievementIds.size(); i++) {
+                    achievementsClient.unlock(getString(achievementIds.get(i)));
+                }
+            }
         }
     }
 
+    private int updateScore() {
+        //get score for question
+        int questionScore = questionModel.calculateScore();
+
+        //update overall score
+        questionModel.updateScore(questionScore);
+
+        //submit overall score to Google Play leaderboard if signed in
+        if (isSignedIn()) {
+            Games.getLeaderboardsClient(this, GoogleSignIn.getLastSignedInAccount(this))
+                    .submitScore(getString(R.string.leaderboard_high_scores), questionModel.getScore());
+        }
+
+        //return question score to display on UI
+        return questionScore;
+    }
+
+    /* User Interface Methods */
     private void hideKeyboard() {
         InputMethodManager imm = (InputMethodManager)getSystemService(this.INPUT_METHOD_SERVICE);
         imm.hideSoftInputFromWindow(answerInput.getWindowToken(), 0);
     }
+
     private void updateUI(Player player) {
 
         Question question = questionModel.getQuestions().get(player.getPosition());
@@ -171,6 +229,7 @@ public class QuestionActivity extends AppCompatActivity {
 
     }
 
+    /* Lifecycle Methods */
     @Override
     public void onPause() {
         questionModel.savePlayer(this);
@@ -178,15 +237,13 @@ public class QuestionActivity extends AppCompatActivity {
     }
 
     @Override
-    public void onResume() {
-        checkForProgressAchievements();
-        super.onResume();
-    }
-
-    @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == CORRECT_ACTIVITY) {
+            //move player to next question
             questionModel.incrementPlayer();
+
+            //check to see if any progress achievements unlocked
+            updateProgressAchievements();
         }
     }
 

@@ -22,21 +22,23 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"/>
 
-    <TextView
-        android:id="@+id/consentDeclinePrivacyPolicyText"
+    <Button
+        android:id="@+id/consentDeclinePrivacyPolicyButton"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="24dp"
         android:layout_marginTop="16dp"
         android:layout_marginEnd="24dp"
+        android:background="@null"
         android:fontFamily="@font/abel"
         android:text="@string/riddler_privacy_policy"
         android:textAlignment="center"
+        android:textAllCaps="false"
         android:textColor="@color/colorAccentReduced"
         android:textSize="16sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/consentDeclineDescription"/>
+        app:layout_constraintTop_toBottomOf="@+id/consentDeclineDescription" />
 
     <LinearLayout
         android:id="@+id/buttonLayout"
@@ -50,7 +52,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/consentDeclinePrivacyPolicyText">
+        app:layout_constraintTop_toBottomOf="@+id/consentDeclinePrivacyPolicyButton">
 
         <Button
             android:id="@+id/consentDeclineBackButton"

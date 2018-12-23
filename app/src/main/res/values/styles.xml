@@ -24,10 +24,17 @@
         <item name="stTextColor">@color/colorSecondary</item>
         <item name="stFont">@font/abel</item>
         <item name="stColorBackground">@color/colorAccent</item>
-        <item name="stLength">SHORT</item>
+        <item name="stLength">LONG</item>
         <item name="stRadius">2dp</item>
     </style>
 
+    <style name="errorToast">
+        <item name="stTextColor">@color/colorSecondary</item>
+        <item name="stFont">@font/abel</item>
+        <item name="stColorBackground">@color/colorError</item>
+        <item name="stLength">LONG</item>
+        <item name="stRadius">2dp</item>
+    </style>
 
     <style name="dialogTheme">
         <item name="android:windowEnterAnimation">@anim/slide_left</item>
