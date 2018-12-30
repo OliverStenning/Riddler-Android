@@ -2,6 +2,6 @@
 /src/main/assets/Questions-En.json
 /src/main/res/values/ad_ids.xml
 /src/main/res/values/ids.xml
-/app/build.gradle
-/app/google-services.json
+/build.gradle
+/google-services.json
 /.idea/assetWizardSettings.xml
