@@ -40,8 +40,7 @@ public class CorrectActivity extends AppCompatActivity {
 
         //initialise interstitial ad
         correctAd = new InterstitialAd(this);
-        //TODO change to release ad id
-        correctAd.setAdUnitId(getString(R.string.question_interstitial_id_test));
+        correctAd.setAdUnitId(getString(R.string.question_interstitial_id));
 
         //get questions since ad from intent pass to activity
         int questionsSinceAd = getIntent().getIntExtra(QuestionActivity.QUESTIONS_SINCE_AD, 0);

@@ -407,8 +407,7 @@ public class QuestionActivity extends AppCompatActivity implements RewardedVideo
     }
 
     private void loadVideoAd() {
-        //TODO change to release ad id
-        rewardedVideoAd.loadAd(getString(R.string.rewarded_video_id_test), new AdRequest.Builder().build());
+        rewardedVideoAd.loadAd(getString(R.string.rewarded_video_id), new AdRequest.Builder().build());
         disableButtons();
     }
 

@@ -81,9 +81,6 @@ public class MenuActivity extends AppCompatActivity implements DialogInterface.O
         //update consent status
         updateConsent(false);
 
-        //google play games sign in
-        signIn();
-
         //create and update settings dialog with correct button states
         settingsDialog = new SettingsDialog();
         settingsDialog.setPlaySignedIn(isSignedIn());
@@ -253,8 +250,6 @@ public class MenuActivity extends AppCompatActivity implements DialogInterface.O
         final Context context = this;
         ConsentInformation consentInformation = ConsentInformation.getInstance(context);
         String[] publisherIds = {"pub-4605466962808569"};
-        //TODO remove before release
-        consentInformation.addTestDevice("8F85985E1F138565EDB3AD4BFCE7C52D");
         consentInformation.requestConsentInfoUpdate(publisherIds, new ConsentInfoUpdateListener() {
             @Override
             public void onConsentInfoUpdated(ConsentStatus consentStatus) {
@@ -268,7 +263,23 @@ public class MenuActivity extends AppCompatActivity implements DialogInterface.O
                         ConsentDialog consentDialog = new ConsentDialog();
                         consentDialog.setCancelable(false); //stop dialog from closing when user touches outside dialog
                         consentDialog.show(getSupportFragmentManager(), "ConsentDialogFragment");
-                        consentDialog.setConsentDialogListener(dialog -> prefManager.setConsentPersonalised(false));
+                        consentDialog.setConsentDialogListener(new ConsentDialog.ConsentDialogListener() {
+                            @Override
+                            public void onConsentAccept(DialogFragment dialog) {
+                                ConsentInformation.getInstance(MenuActivity.this).setConsentStatus(ConsentStatus.PERSONALIZED);
+
+                                //start google play sign in
+                                signIn();
+                            }
+
+                            @Override
+                            public void onConsentDecline(DialogFragment dialog) {
+                                prefManager.setConsentPersonalised(false);
+
+                                //start google play sign in
+                                signIn();
+                            }
+                        });
                     }
                 }
             }

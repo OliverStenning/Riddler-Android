@@ -156,7 +156,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/answerInput"/>
 
-    <!-- TODO change to release ad id -->
     <com.google.android.gms.ads.AdView
         xmlns:ads="http://schemas.android.com/apk/res-auto"
         android:id="@+id/questionBanner"
@@ -164,7 +163,7 @@
         android:layout_height="wrap_content"
         android:visibility="visible"
         ads:adSize="SMART_BANNER"
-        ads:adUnitId="@string/question_banner_id_test"
+        ads:adUnitId="@string/question_banner_id"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"/>

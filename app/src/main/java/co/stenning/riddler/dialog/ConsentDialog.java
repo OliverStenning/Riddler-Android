@@ -17,6 +17,7 @@ import co.stenning.riddler.R;
 public class ConsentDialog extends DialogFragment {
 
     public interface ConsentDialogListener {
+        void onConsentAccept(DialogFragment dialog);
         void onConsentDecline(DialogFragment dialog);
     }
 
@@ -33,7 +34,7 @@ public class ConsentDialog extends DialogFragment {
         //update consent to PERSONALISED and close dialog
         Button acceptButton = dialogView.findViewById(R.id.consentAcceptButton);
         acceptButton.setOnClickListener(view -> {
-            ConsentInformation.getInstance(getActivity()).setConsentStatus(ConsentStatus.PERSONALIZED);
+            listener.onConsentAccept(ConsentDialog.this);
             dismiss();
         });
 
