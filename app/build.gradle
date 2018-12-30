@@ -1,10 +1,18 @@
 apply plugin: 'com.android.application'
 
 android {
+    signingConfigs {
+        config {
+            keyAlias 'key0'
+            keyPassword 'BeeFCaKe123'
+            storeFile file('C:/Users/Oliver/Programming/Riddler/riddler_keystore.jks')
+            storePassword 'BeeFCaKe123'
+        }
+    }
     compileSdkVersion 28
     defaultConfig {
         applicationId "co.stenning.riddler"
-        minSdkVersion 19
+        minSdkVersion 21
         targetSdkVersion 27
         versionCode 1
         versionName "1.0"
@@ -15,28 +23,29 @@ android {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.config
+        }
+        debug {
+            signingConfig signingConfigs.config
         }
     }
-
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
 }
 
-
-
 dependencies {
-    implementation fileTree(dir: 'libs', include: ['*.jar'])
-
+    implementation fileTree(include: ['*.jar'], dir: 'libs')
     def appCompat = "1.0.2"
     def constraintLayout = "2.0.0-alpha2"
     def lifecycle = "2.0.0"
     def lottie = "2.8.0"
     def GSON = "2.8.0"
-    def mobileAds = "16.0.0"
+    def firebaseAds = "17.1.2"
     def auth = "16.0.1"
     def gamesServices = "16.0.0"
+    def firebase = "16.0.6"
     def consent = "1.0.6"
     def styleableToast = "2.2.0"
     def legacy = "1.0.0"
@@ -56,11 +65,15 @@ dependencies {
     //GSON
     implementation "com.google.code.gson:gson:$GSON"
 
-    //Ads & Play Services
-    implementation "com.google.android.gms:play-services-ads:$mobileAds"
+    //Firebase Ads
+    implementation "com.google.firebase:firebase-ads:$firebaseAds"
 
+    //Ads & Play Services
     implementation "com.google.android.gms:play-services-auth:$auth"
     implementation "com.google.android.gms:play-services-games:$gamesServices"
+
+    //Firebase Analytics
+    implementation "com.google.firebase:firebase-core:$firebase"
 
     //Consent
     implementation "com.google.android.ads.consent:consent-library:$consent"
@@ -70,9 +83,9 @@ dependencies {
 
     //Legacy Support
     implementation "androidx.legacy:legacy-support-v4:$legacy"
-
-
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'androidx.test:runner:1.1.0'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.1.0'
 }
+
+apply plugin: 'com.google.gms.google-services'

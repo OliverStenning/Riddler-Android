@@ -4,27 +4,53 @@
     <string name="app_name">Riddler</string>
     <string name="player_file">Player.json</string>
     <string name="questions_file">Questions-En.json</string>
-
-    <!-- Email -->
-    <string name="bug_email">bugs@stenning.co</string>
-    <string name="bug_subject">I found a bug in Riddler</string>
-
-    <!-- Privacy Policy -->
-    <string name="privacy_policy">http://riddler.stenning.co/privacypolicy</string>
-
-    <!-- General Buttons -->
-    <string name="back_button">Back</string>
-    <string name="close_button">Close</string>
-    <string name="watch_ad_button">Watch Ad</string>
-
-    <!-- Toast -->
-    <string name="hints_expended">This question has no more hints.</string>
-    <string name="sign_in_failed">Could not sign into Google Play Games.</string>
-
+    
     <!--///// MENU ACTIVITY /////-->
     <string name="start_button">Start</string>
     <string name="resume_button">Continue</string>
     <string name="default_version">v1.0</string>
+    <string name="sign_in_failed">Could not sign into Google Play Games.</string>
+
+    <!--///// QUESTION ACTIVITY /////-->
+    <string name="default_question_progress">1/50</string>
+    <string name="default_question">What gets wetter the more it dries?</string>
+    <string name="skip_button">Skip</string>
+    <string name="hints_button">Hints</string>
+    <string name="input_hint">Answer</string>
+    <string name="ad_load_failed">Ad failed to load.</string>
+
+    <!--///// CORRECT ACTIVITY /////-->
+    <string name="correct_label">Correct</string>
+    <string name="score_label">Score: </string>
+    <string name="correct_skipped">Skipped</string>
+
+    <!--///// COMPLETION ACTIVITY /////-->
+    <string name="congratulations_label">Congratulations</string>
+    <string name="you_have_label">you have completed</string>
+
+
+
+    <!--// SETTINGS DIALOG //-->
+    <string name="settings_title">Settings</string>
+    <string name="play_sign_out_text">Google Play Games</string>
+    <string name="play_sign_out_button">Sign Out</string>
+    <string name="play_sign_in_button">Sign In</string>
+    <string name="privacy_settings_text">Privacy Settings</string>
+    <string name="privacy_settings_button">Update</string>
+    <string name="bug_report_text">Found a bug?</string>
+    <string name="bug_report_button">Report</string>
+    <string name="privacy_policy_text">Privacy Policy</string>
+    <string name="privacy_policy_button">Read</string>
+    <string name="settings_review_text">Rate on Play Store</string>
+    <string name="settings_review_button">Rate</string>
+
+    <!-- Email -->
+    <string name="bug_email">contact@stenning.co</string>
+    <string name="bug_subject">I found a bug in Riddler</string>
+
+    <!-- Privacy Policy -->
+    <string name="privacy_policy">https://www.stenning.co/riddler</string>
+
 
     <!--// CONSENT DIALOG //-->
     <!-- Main Dialog -->
@@ -49,43 +75,19 @@
     <!-- Dialog Buttons -->
     <string name="consent_accept_button">Accept</string>
     <string name="consent_decline_button">Decline</string>
+    <string name="back_button">Back</string>
 
-    <!--// SETTINGS DIALOG //-->
-    <string name="settings_title">Settings</string>
-    <string name="play_sign_out_text">Google Play Games</string>
-    <string name="play_sign_out_button">Sign Out</string>
-    <string name="play_sign_in_button">Sign In</string>
-    <string name="privacy_settings_text">Privacy Settings</string>
-    <string name="privacy_settings_button">Update</string>
-    <string name="bug_report_text">Found a bug?</string>
-    <string name="bug_report_button">Report</string>
-    <string name="privacy_policy_text">Privacy Policy</string>
-    <string name="privacy_policy_button">Read</string>
-
-    <!--///// QUESTION ACTIVITY /////-->
-    <string name="default_question_progress">1/50</string>
-    <string name="default_question">What gets wetter the more it dries?</string>
-
-    <string name="skip_button">Skip</string>
-    <string name="hints_button">Hints</string>
-    <string name="input_hint">Answer</string>
-
-    <!-- Hint Dialog -->
+    <!--// HINT DIALOG //-->
     <string name="hint_title">You\'ve run out of Hints!</string>
     <string name="hint_description">Why not watch an ad to unlock 5 more hints?</string>
+    <string name="watch_ad_button">Watch Ad</string>
+    <string name="close_button">Close</string>
+    <string name="hints_expended">This question has no more hints.</string>
 
-    <!-- Skip Dialog -->
-    <string name="skip_title">Completely Stuck?</string>
-    <string name="skip_description">Why not watch an ad to skip to the next riddle?</string>
-
-    <!--///// CORRECT ACTIVITY /////-->
-    <string name="correct_label">Correct</string>
-    <string name="correct_score_label">Score: </string>
-
-    <!--///// COMPLETION ACTIVITY /////-->
-    <string name="congratulations_label">Congratulations</string>
-    <string name="you_have_label">you have completed</string>
-
-
+    <!--// REVIEW DIALOG //-->
+    <string name="review_title">Enjoying yourself?</string>
+    <string name="review_description">Leave a rating on the play store?</string>
+    <string name="review_button">Rate</string>
+    <string name="review_no">Never</string>
 
 </resources>

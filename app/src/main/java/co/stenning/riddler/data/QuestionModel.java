@@ -1,7 +1,5 @@
-package co.stenning.riddler.view;
+package co.stenning.riddler.data;
 
-import androidx.lifecycle.MutableLiveData;
-import androidx.lifecycle.ViewModel;
 import android.content.Context;
 import android.util.Log;
 
@@ -20,15 +18,15 @@ import java.io.Writer;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 
+import androidx.lifecycle.MutableLiveData;
+import androidx.lifecycle.ViewModel;
 import co.stenning.riddler.R;
-import co.stenning.riddler.classes.Player;
-import co.stenning.riddler.classes.Question;
 
 public class QuestionModel extends ViewModel {
 
     /* Loading Player from File */
     private final static Gson gson = new GsonBuilder().setPrettyPrinting().create();
-    private final boolean RESET_PLAYER = true;
+    private final boolean RESET_PLAYER = false;
 
     /* Scoring System Values */
     private static final int MAX_TIME_SCORE = 2000;
@@ -37,6 +35,10 @@ public class QuestionModel extends ViewModel {
 
     private static final int GUESS_SCORE_REDUCTION = 500;
     private static final int HINT_SCORE_REDUCTION = 500;
+
+    private static final int ACHIEVEMENT_TIME = 300;
+
+    private static final int QUESTIONS_BEFORE_REVIEW = 5;
 
     /* Game Data */
     private MutableLiveData<Player> player;
@@ -72,7 +74,7 @@ public class QuestionModel extends ViewModel {
                 }
             } else {
                 Player tempPlayer = new Player();
-                tempPlayer.setPosition(9);
+                //tempPlayer.setPosition(9);
                 player.setValue(tempPlayer);
             }
         }
@@ -110,31 +112,28 @@ public class QuestionModel extends ViewModel {
     /* Game Operation Methods */
     public boolean guess(String guess) {
 
-        guess = guess.toLowerCase();
+        // makes it case insensitive and removes spaces at end
+        guess = guess.toLowerCase().trim();
         int i = 0;
         boolean correct = false;
-        int position = player.getValue().getPosition();
+        int position = player.getValue().getQuestionNumber();
         Player tempPlayer = player.getValue();
 
         while (!correct && i < questions.get(position).getAnswers().length) {
-            if (guess.length() > 3) {
-                if (guess.equals(questions.get(position).getAnswers()[i])) {
-                    correct = true;
-                } else {
-                    i += 1;
-                }
+            if (guess.length() <= 3) {
+                // if less than or 3 characters must be exact
+                if (guess.equals(questions.get(position).getAnswers()[i])) { correct = true; }
+                else { i += 1; }
             } else {
-                if (guess.contains(questions.get(position).getAnswers()[i])) {
-                    correct = true;
-                } else {
-                    i += 1;
-                }
+                // otherwise it just needs to contain answer
+                if (guess.contains(questions.get(position).getAnswers()[i])) { correct = true; }
+                else { i += 1; }
             }
         }
 
-        if (correct) {
+        if (correct)
             return true;
-        } else {
+        else {
             tempPlayer.incrementIncorrectGuesses();
             player.setValue(tempPlayer);
             return false;
@@ -144,14 +143,55 @@ public class QuestionModel extends ViewModel {
 
     public void useHint() {
         Player tempPlayer = player.getValue();
-        tempPlayer.incrementQuestionHintsUsed();
-        tempPlayer.incrementTotalHintsUsed();
-        tempPlayer.decrementHints();
+        tempPlayer.incrementHintsUsed();
+        tempPlayer.removeHints(1);
         player.setValue(tempPlayer);
     }
 
-    public void useSkip() {
-        //TODO implement skip functionality
+    public ArrayList<Integer> checkProgressAchievements() {
+        //try to unlock achievements in case not signed in when earned
+        int position = player.getValue().getQuestionNumber();
+        ArrayList<Integer> unlockedAchievements = new ArrayList<>();
+
+        //add each achievement user should have unlocked
+        if (position >= 10)
+            unlockedAchievements.add(R.string.achievement_youre_a_natural);
+        if (position >= 20)
+            unlockedAchievements.add(R.string.achievement_riddle_lover);
+        if (position >= 30)
+            unlockedAchievements.add(R.string.achievement_riddle_pro);
+        if (position >= 40)
+            unlockedAchievements.add(R.string.achievement_riddle_master);
+        if (position >= 50)
+            unlockedAchievements.add(R.string.achievement_defeat_the_riddler);
+
+        //return list of all progress achievements user should have unlocked
+        return unlockedAchievements;
+    }
+
+    public ArrayList<Integer> checkOtherAchievements() {
+        //get reference to the player
+        Player tempPlayer = player.getValue();
+        ArrayList<Integer> achievementIds = new ArrayList<>();
+
+        //check to see if its been more than 5 minutes since the question started
+        int secondsSinceStart = (int) ((System.nanoTime() - tempPlayer.getQuestionTimeStarted()) / 1000000000);
+        if (secondsSinceStart > ACHIEVEMENT_TIME)
+            achievementIds.add(R.string.achievement_in_your_own_time___);
+
+        //check to see if there are no incorrect guesses for the question
+        if (tempPlayer.getQuestionIncorrectGuesses() == 0)
+            achievementIds.add(R.string.achievement_first_try);
+
+        //check to see if the player guessed correctly with no hints
+        if (tempPlayer.getQuestionHintsUsed() == 0)
+            achievementIds.add(R.string.achievement_look_mom_no_hints);
+
+        //check to see if the player used all hints for question
+        if (tempPlayer.getQuestionHintsUsed() == questions.get(tempPlayer.getQuestionNumber()).getHint().length)
+            achievementIds.add(R.string.achievement_helping_hand);
+
+        return achievementIds;
     }
 
     public int calculateScore() {
@@ -198,34 +238,30 @@ public class QuestionModel extends ViewModel {
         return player.getValue().getScore();
     }
 
-    public ArrayList<Integer> checkProgressAchievements() {
-        //try to unlock achievements in case not signed in when earned
-        int position = player.getValue().getPosition();
-        ArrayList<Integer> unlockedAchievements = new ArrayList<>();
-
-        //add each achievement user should have unlocked
-        if (position >= 10)
-            unlockedAchievements.add(R.string.achievement_youre_a_natural);
-        if (position >= 20)
-            unlockedAchievements.add(R.string.achievement_riddle_lover);
-        if (position >= 30)
-            unlockedAchievements.add(R.string.achievement_riddle_pro);
-        if (position >= 40)
-            unlockedAchievements.add(R.string.achievement_riddle_master);
-        if (position >= 50)
-            unlockedAchievements.add(R.string.achievement_defeat_the_riddler);
-
-        //return list of all progress achievements user should have unlocked
-        return unlockedAchievements;
-    }
-
     public void incrementPlayer() {
         Player tempPlayer = player.getValue();
-        tempPlayer.incrementPosition();
+        tempPlayer.incrementQuestionNumber();
         tempPlayer.setQuestionTimeStarted(System.nanoTime());
         tempPlayer.setQuestionHintsUsed(0);
         tempPlayer.setQuestionIncorrectGuesses(0);
+        tempPlayer.incrementQuestionsSinceAd();
         player.setValue(tempPlayer);
+    }
+
+    public void addHints(int amount) {
+        Player tempPlayer = player.getValue();
+        tempPlayer.addHints(amount);
+        player.setValue(tempPlayer);
+    }
+
+    public void setQuestionsSinceAd(int questionsSinceAd) {
+        Player tempPlayer = player.getValue();
+        tempPlayer.setQuestionsSinceAd(questionsSinceAd);
+        player.setValue(tempPlayer);
+    }
+
+    public int getQuestionsSinceAd() {
+        return player.getValue().getQuestionsSinceAd();
     }
 
     public void setFirstStartTime() {
@@ -235,4 +271,32 @@ public class QuestionModel extends ViewModel {
             player.setValue(tempPlayer);
         }
     }
+
+    public void incrementTotalSkips() {
+        Player tempPlayer = player.getValue();
+        tempPlayer.incrementTotalSkips();
+        player.setValue(tempPlayer);
+    }
+
+    public void setReviewed() {
+        Player tempPlayer = player.getValue();
+        tempPlayer.setRatingAsked(true);
+        player.setValue(tempPlayer);
+    }
+
+    public boolean shouldReview() {
+        Player tempPlayer = player.getValue();
+        if (!tempPlayer.isRatingAsked() && tempPlayer.getQuestionNumber() > QUESTIONS_BEFORE_REVIEW) {
+            System.out.println("Review Dialog Launched");
+            System.out.println(tempPlayer.isRatingAsked());
+            System.out.println(tempPlayer.getQuestionNumber());
+            return true;
+        } else {
+            System.out.println("Review Dialog not Launched");
+            System.out.println(tempPlayer.isRatingAsked());
+            System.out.println(tempPlayer.getQuestionNumber());
+            return false;
+        }
+    }
+
 }

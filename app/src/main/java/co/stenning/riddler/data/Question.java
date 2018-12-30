@@ -1,4 +1,4 @@
-package co.stenning.riddler.classes;
+package co.stenning.riddler.data;
 
 public class Question {
 

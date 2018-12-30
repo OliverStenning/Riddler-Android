@@ -1,4 +1,4 @@
-package co.stenning.riddler.view;
+package co.stenning.riddler.dialog;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
@@ -8,11 +8,9 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
-import android.widget.TextView;
 
 import androidx.fragment.app.DialogFragment;
 import co.stenning.riddler.R;
-import co.stenning.riddler.util.URLSpanNoUnderline;
 
 public class ConsentDeclineDialog extends DialogFragment {
 

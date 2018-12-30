@@ -1,4 +1,4 @@
-package co.stenning.riddler.view;
+package co.stenning.riddler.dialog;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -17,12 +17,13 @@ import co.stenning.riddler.R;
 
 public class SettingsDialog extends DialogFragment {
 
-    public interface SettingsDialogListener {
-        void onPlayGamesClick(DialogFragment dialog);
-        void onPrivacySettingsClick(DialogFragment dialog);
+    public interface Listener {
+        void onPlayGamesClicked(DialogFragment dialog);
+        void onPrivacySettingsClicked(DialogFragment dialog);
+        void onReviewClicked(DialogFragment dialog);
     }
 
-    private SettingsDialogListener listener;
+    private Listener listener;
     private boolean playSignedIn;
     private Button playGamesButton;
 
@@ -39,10 +40,10 @@ public class SettingsDialog extends DialogFragment {
 
         playGamesButton = dialogView.findViewById(R.id.playGamesButton);
         updateButtons();
-        playGamesButton.setOnClickListener(view -> listener.onPlayGamesClick(SettingsDialog.this));
+        playGamesButton.setOnClickListener(view -> listener.onPlayGamesClicked(SettingsDialog.this));
 
         Button privacySettingsButton = dialogView.findViewById(R.id.privacySettingsButton);
-        privacySettingsButton.setOnClickListener(view -> listener.onPrivacySettingsClick(SettingsDialog.this));
+        privacySettingsButton.setOnClickListener(view -> listener.onPrivacySettingsClicked(SettingsDialog.this));
 
         Button bugReportButton = dialogView.findViewById(R.id.bugReportButton);
         bugReportButton.setOnClickListener(view -> {
@@ -59,10 +60,13 @@ public class SettingsDialog extends DialogFragment {
             startActivity(browserIntent);
         });
 
+        Button settingsReviewButton = dialogView.findViewById(R.id.settingsReviewButton);
+        settingsReviewButton.setOnClickListener(view -> listener.onReviewClicked(SettingsDialog.this));
+
         return builder.create();
     }
 
-    protected void setSettingsDialogListener(SettingsDialog.SettingsDialogListener listener) {
+    public void setSettingsDialogListener(SettingsDialog.Listener listener) {
         this.listener = listener;
     }
 

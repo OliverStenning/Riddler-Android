@@ -5,7 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/colorPrimary"
+    android:background="@color/colorBackground"
     android:orientation="vertical">
 
 
@@ -17,13 +17,13 @@
         android:layout_marginTop="16dp"
         android:layout_marginEnd="24dp"
         android:fontFamily="@font/abel"
-        android:text="@string/skip_description"
+        android:text="@string/review_description"
         android:textAlignment="center"
         android:textColor="@color/colorAccentReduced"
         android:textSize="18sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView4"/>
+        app:layout_constraintTop_toBottomOf="@+id/textView4" />
 
     <LinearLayout
         android:id="@+id/buttonLayout"
@@ -41,7 +41,7 @@
         app:layout_constraintTop_toBottomOf="@+id/textView3">
 
         <Button
-            android:id="@+id/skipBackButton"
+            android:id="@+id/neverButton"
             style="android:attr/buttonBarButtonStyle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -49,14 +49,14 @@
             android:layout_weight="1"
             android:background="@drawable/bg_button_grayed"
             android:fontFamily="@font/teko_medium"
-            android:text="@string/back_button"
+            android:text="@string/review_no"
             android:textColor="@color/colorSecondary"
             android:textSize="24sp"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent"/>
+            app:layout_constraintStart_toStartOf="parent" />
 
         <Button
-            android:id="@+id/skipSkipButton"
+            android:id="@+id/reviewButton"
             style="android:attr/buttonBarButtonStyle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -64,10 +64,10 @@
             android:layout_weight="1"
             android:background="@drawable/bg_button"
             android:fontFamily="@font/teko_medium"
-            android:text="@string/watch_ad_button"
+            android:text="@string/review_button"
             android:textColor="@color/colorSecondary"
             android:textSize="24sp"
-            app:layout_constraintEnd_toEndOf="parent"/>
+            app:layout_constraintEnd_toEndOf="parent" />
 
     </LinearLayout>
 
@@ -79,11 +79,11 @@
         android:layout_marginTop="16dp"
         android:layout_marginEnd="24dp"
         android:fontFamily="@font/abel"
-        android:text="@string/skip_title"
+        android:text="@string/review_title"
         android:textAlignment="center"
         android:textColor="@color/colorAccent"
         android:textSize="28sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"/>
+        app:layout_constraintTop_toTopOf="parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,4 +1,4 @@
-package co.stenning.riddler.view;
+package co.stenning.riddler.dialog;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
@@ -9,7 +9,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ListView;
-import android.widget.TextView;
 
 import com.google.ads.consent.AdProvider;
 import com.google.ads.consent.ConsentInformation;
@@ -19,7 +18,7 @@ import java.util.List;
 
 import androidx.fragment.app.DialogFragment;
 import co.stenning.riddler.R;
-import co.stenning.riddler.util.URLSpanNoUnderline;
+import co.stenning.riddler.view.AdProviderAdapter;
 
 public class ConsentMoreInfoDialog extends DialogFragment {
 

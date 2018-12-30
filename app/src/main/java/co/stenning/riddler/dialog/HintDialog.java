@@ -1,4 +1,4 @@
-package co.stenning.riddler.view;
+package co.stenning.riddler.dialog;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
@@ -35,7 +35,7 @@ public class HintDialog extends DialogFragment {
         return builder.create();
     }
 
-    protected void setHintDialogListener(HintDialog.HintDialogListener listener) {
+    public void setHintDialogListener(HintDialog.HintDialogListener listener) {
         this.listener = listener;
     }
 

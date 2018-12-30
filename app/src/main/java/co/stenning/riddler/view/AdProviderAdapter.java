@@ -17,14 +17,13 @@ public class AdProviderAdapter extends ArrayAdapter<AdProvider> {
 
     private Activity context;
 
-    protected AdProviderAdapter(Activity context, ArrayList<AdProvider> adProviders) {
+    public AdProviderAdapter(Activity context, ArrayList<AdProvider> adProviders) {
         super(context, 0, adProviders);
         this.context = context;
     }
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        AdProvider adProvider = getItem(position);
 
         if (convertView == null) {
             LayoutInflater inflater = context.getLayoutInflater();

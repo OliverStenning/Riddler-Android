@@ -9,7 +9,6 @@ import android.os.Bundle;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.ads.consent.ConsentInfoUpdateListener;
 import com.google.ads.consent.ConsentInformation;
@@ -22,14 +21,16 @@ import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.auth.api.signin.GoogleSignInResult;
 import com.google.android.gms.games.Games;
 import com.google.android.gms.games.GamesClient;
-import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.analytics.FirebaseAnalytics;
 import com.muddzdev.styleabletoast.StyleableToast;
 
-import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.DialogFragment;
 import co.stenning.riddler.R;
-import co.stenning.riddler.classes.PrefManager;
+import co.stenning.riddler.util.PrefManager;
+import co.stenning.riddler.dialog.ConsentDialog;
+import co.stenning.riddler.dialog.SettingsDialog;
+import co.stenning.riddler.util.Utilities;
 
 public class MenuActivity extends AppCompatActivity implements DialogInterface.OnDismissListener {
 
@@ -38,11 +39,15 @@ public class MenuActivity extends AppCompatActivity implements DialogInterface.O
     private GoogleSignInAccount signedInAccount;
     private GamesClient gamesClient;
 
+    /* Firebase Analytics */
+    private FirebaseAnalytics firebaseAnalytics;
+
     //arbitrary numbers to determine activity result origin
     private static final int RC_SIGN_IN = 9001;
     private static final int RC_ACHIEVEMENT_UI = 9003;
     private static final int RC_LEADERBOARD_UI = 9004;
     public static final String ACCOUNT_PARCEL = "account";
+    public static final String SETTINGS_REVIEWED = "reviewed";
 
     /* Consent */
     private final boolean CONSENT_CHECK = false;
@@ -51,15 +56,17 @@ public class MenuActivity extends AppCompatActivity implements DialogInterface.O
     /* Settings Dialog */
     private SettingsDialog settingsDialog;
     private boolean isSettingsDisplayed;
+    private boolean settingsReviewed = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
-                WindowManager.LayoutParams.FLAG_FULLSCREEN);
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_menu);
 
         prefManager = new PrefManager(this);
+
+        firebaseAnalytics = FirebaseAnalytics.getInstance(this);
 
         //update version text
         TextView versionText = findViewById(R.id.versionText);
@@ -160,32 +167,48 @@ public class MenuActivity extends AppCompatActivity implements DialogInterface.O
 
     /* Menu Activity Button Methods */
     public void clickStart(View view) {
+        // log navigation event
+        Utilities.navigateLog(firebaseAnalytics, "start");
+
+        //switch to question activity
         Intent intent = new Intent(this, QuestionActivity.class);
         intent.putExtra(ACCOUNT_PARCEL, signedInAccount);
+        intent.putExtra(SETTINGS_REVIEWED, settingsReviewed);
         startActivity(intent);
     }
 
     public void clickSettings(View view) {
-        //create settings dialog
+        // log navigation event
+        Utilities.navigateLog(firebaseAnalytics, "settings");
+
+        // create settings dialog
         isSettingsDisplayed = true;
         settingsDialog.show(getSupportFragmentManager(), "SettingsDialogFragment");
-        settingsDialog.setSettingsDialogListener(new SettingsDialog.SettingsDialogListener() {
+        settingsDialog.setSettingsDialogListener(new SettingsDialog.Listener() {
             @Override
-            public void onPlayGamesClick(DialogFragment dialog) {
+            public void onPlayGamesClicked(DialogFragment dialog) {
                 if (isSignedIn())
                     signOut();
                 else
                     signIn();
             }
             @Override
-            public void onPrivacySettingsClick(DialogFragment dialog) {
+            public void onPrivacySettingsClicked(DialogFragment dialog) {
                 settingsDialog.dismiss();
                 updateConsent(true);
+            }
+            @Override
+            public void onReviewClicked(DialogFragment dialog) {
+                Utilities.openReviewPage(MenuActivity.this);
+                settingsReviewed = true;
             }
         });
     }
 
     public void clickAchievement(View view) {
+        // log navigation event
+        Utilities.navigateLog(firebaseAnalytics, "achievements");
+
         //sign in if not already signed in
         if (!signInIfNotAlready()) {
             //if already signed in display achievements
@@ -198,6 +221,9 @@ public class MenuActivity extends AppCompatActivity implements DialogInterface.O
     }
 
     public void clickLeaderboard(View view) {
+        // log navigation event
+        Utilities.navigateLog(firebaseAnalytics, "leaderboards");
+
         //sign in if not already signed in
         if (!signInIfNotAlready()) {
             //if already signed in display leaderboard
@@ -236,12 +262,13 @@ public class MenuActivity extends AppCompatActivity implements DialogInterface.O
                 if (ConsentInformation.getInstance(context).isRequestLocationInEeaOrUnknown() || forcedUpdate || CONSENT_CHECK) {
                     //create dialog to collect consent status if unknown
                     if (consentStatus == ConsentStatus.UNKNOWN || forcedUpdate || CONSENT_CHECK) {
+                        // log navigation event
+                        Utilities.navigateLog(firebaseAnalytics, "consent");
+
                         ConsentDialog consentDialog = new ConsentDialog();
                         consentDialog.setCancelable(false); //stop dialog from closing when user touches outside dialog
                         consentDialog.show(getSupportFragmentManager(), "ConsentDialogFragment");
-                        consentDialog.setConsentDialogListener(dialog -> {
-                            prefManager.setConsentPersonalised(false);
-                        });
+                        consentDialog.setConsentDialogListener(dialog -> prefManager.setConsentPersonalised(false));
                     }
                 }
             }

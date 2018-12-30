@@ -1,4 +1,4 @@
-package co.stenning.riddler.classes;
+package co.stenning.riddler.util;
 
 import android.content.Context;
 import android.content.SharedPreferences;

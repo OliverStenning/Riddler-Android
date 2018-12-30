@@ -5,7 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/colorPrimary"
+    android:background="@color/colorBackground"
     tools:context=".view.QuestionActivity">
 
     <FrameLayout
@@ -19,7 +19,7 @@
 
     <ProgressBar
         android:id="@+id/questionProgress"
-        style="@style/questionProgress"
+        style="@style/QuestionProgressBar"
         android:layout_width="0dp"
         android:layout_height="10dp"
         android:progress="67"
@@ -156,6 +156,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/answerInput"/>
 
+    <!-- TODO change to release ad id -->
     <com.google.android.gms.ads.AdView
         xmlns:ads="http://schemas.android.com/apk/res-auto"
         android:id="@+id/questionBanner"
@@ -163,7 +164,7 @@
         android:layout_height="wrap_content"
         android:visibility="visible"
         ads:adSize="SMART_BANNER"
-        ads:adUnitId="ca-app-pub-4605466962808569/1884513304"
+        ads:adUnitId="@string/question_banner_id_test"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"/>

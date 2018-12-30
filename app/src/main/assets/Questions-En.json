@@ -62,7 +62,7 @@
   {
     "question": "What can run but cannot walk?",
     "answers": [ "water" ],
-    "hint": [ "Think of states,", "You need me to survive." ]
+    "hint": [ "Think of states.", "You need me to survive." ]
   },
   {
     "question": "What never asks questions but is often answered?",
@@ -80,7 +80,7 @@
     "hint": [ "You're using it right now.", "You need it to live." ]
   },
   {
-    "question": "If I have it, I don't share it. If I share it, I don't have it. What am I?",
+    "question": "If I have it, I don't share it. If I share it, I don't have it. What is it?",
     "answers": [ "secret" ],
     "hint": [ "Some people love them, some people hate them.", "Mysterious people may have a lot of them." ]
   },

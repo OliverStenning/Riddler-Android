@@ -1,18 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#2C3E50</color>
+
+    <!-- Main App Colors -->
+    <color name="colorPrimary">#273748</color>
+    <color name="colorBackground">#2C3E50</color>
     <color name="colorSecondary">#273748</color>
     <color name="colorAccent">#10AC84</color>
     <color name="colorAccentReduced">#B410AC84</color>
     <color name="colorError">#EB4D4D</color>
 
+    <!-- Button Colors -->
     <color name="buttonPrimary">#019875</color>
     <color name="buttonPressed">#006850</color>
     <color name="buttonDisabled">#535C68</color>
 
+    <!-- Low Priority Button Colors -->
     <color name="buttonGrayedPrimary">#737F8C</color>
     <color name="buttonGrayedPressed">#607D8B</color>
     <color name="buttonGrayedDisabled">#535C68</color>
-
 
 </resources>
