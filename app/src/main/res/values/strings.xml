@@ -4,7 +4,7 @@
     <string name="app_name">Riddler</string>
     <string name="player_file">Player.json</string>
     <string name="questions_file">Questions-En.json</string>
-    
+
     <!--///// MENU ACTIVITY /////-->
     <string name="start_button">Start</string>
     <string name="resume_button">Continue</string>
