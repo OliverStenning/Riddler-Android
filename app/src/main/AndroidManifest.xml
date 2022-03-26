@@ -5,12 +5,12 @@
     package="co.stenning.riddler">
 
     <application
-        android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/GameTheme">
+        android:theme="@style/GameTheme"
+        tools:replace="android:icon,android:theme">
 
         <!-- Play Games ID -->
         <meta-data android:name="com.google.android.gms.games.APP_ID"
@@ -30,20 +30,26 @@
 
         <!-- Activities -->
         <activity android:name="co.stenning.riddler.view.MenuActivity"
-            android:screenOrientation="portrait">
+            android:screenOrientation="portrait"
+            android:exported="true"
+            tools:ignore="LockedOrientationActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
         <activity android:name="co.stenning.riddler.view.QuestionActivity"
-            android:screenOrientation="portrait">
+            android:screenOrientation="portrait"
+            tools:ignore="LockedOrientationActivity"
+            android:windowSoftInputMode="adjustPan">
         </activity>
         <activity android:name="co.stenning.riddler.view.CorrectActivity"
-            android:screenOrientation="portrait">
+            android:screenOrientation="portrait"
+            tools:ignore="LockedOrientationActivity">
         </activity>
         <activity android:name="co.stenning.riddler.view.CompletionActivity"
-            android:screenOrientation="portrait">
+            android:screenOrientation="portrait"
+            tools:ignore="LockedOrientationActivity">
         </activity>
     </application>
 

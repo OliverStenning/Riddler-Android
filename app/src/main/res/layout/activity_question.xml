@@ -5,7 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/colorBackground"
+    android:background="@drawable/background_primary"
     tools:context=".view.QuestionActivity">
 
     <FrameLayout
@@ -59,50 +59,51 @@
     <TextView
         android:id="@+id/questionText"
         android:layout_width="0dp"
-        android:layout_height="140dp"
-        android:layout_marginEnd="16dp"
-        android:layout_marginStart="24dp"
-        android:layout_marginTop="8dp"
+        android:layout_height="160dp"
+        android:layout_marginStart="32dp"
+        android:layout_marginTop="64dp"
+        android:layout_marginEnd="32dp"
         android:fontFamily="@font/abel"
         android:gravity="center"
         android:text="@string/default_question"
         android:textAlignment="center"
         android:textColor="@color/colorAccent"
-        android:textSize="26sp"
+        android:textSize="32sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/questionProgressText"/>
+        app:layout_constraintTop_toBottomOf="@+id/questionProgressText" />
 
     <Button
         android:id="@+id/skipButton"
-        android:layout_width="wrap_content"
-        android:layout_height="30dp"
+        android:layout_width="120dp"
+        android:layout_height="40dp"
         android:layout_marginStart="24dp"
         android:background="@drawable/bg_button"
         android:fontFamily="@font/teko_medium"
         android:onClick="clickSkip"
         android:text="@string/skip_button"
         android:textAllCaps="false"
-        android:textColor="@color/colorSecondary"
-        android:textSize="18sp"
+        android:textColor="@color/colorPrimaryDark"
+        android:textSize="24sp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/hintButton"/>
+        app:layout_constraintTop_toTopOf="@+id/hintButton"
+        tools:visibility="gone" />
 
     <Button
         android:id="@+id/hintButton"
-        android:layout_width="wrap_content"
-        android:layout_height="30dp"
+        android:layout_width="120dp"
+        android:layout_height="40dp"
+        android:layout_marginTop="64dp"
         android:layout_marginEnd="24dp"
-        android:layout_marginTop="16dp"
         android:background="@drawable/bg_button"
         android:fontFamily="@font/teko_medium"
         android:onClick="clickHint"
         android:text="@string/hints_button"
         android:textAllCaps="false"
-        android:textColor="@color/colorSecondary"
-        android:textSize="18sp"
+        android:textColor="@color/colorPrimaryDark"
+        android:textSize="24sp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/questionText"/>
+        app:layout_constraintTop_toBottomOf="@+id/questionText" />
 
     <EditText
         android:id="@+id/answerInput"
@@ -111,7 +112,7 @@
         android:layout_marginEnd="8dp"
         android:layout_marginStart="24dp"
         android:layout_marginTop="8dp"
-        android:background="@color/colorSecondary"
+        android:background="@drawable/bg_edittext"
         android:ems="10"
         android:fontFamily="@font/abel"
         android:hint="@string/input_hint"
@@ -119,7 +120,8 @@
         android:paddingEnd="16dp"
         android:paddingStart="16dp"
         android:textColor="@color/colorAccent"
-        android:textColorHint="@color/colorAccentReduced"
+        android:textColorHint="@color/colorSecondary"
+        android:textSize="24sp"
         app:layout_constraintBottom_toBottomOf="@+id/enterButton"
         app:layout_constraintEnd_toStartOf="@+id/enterButton"
         app:layout_constraintStart_toStartOf="parent"
@@ -150,7 +152,8 @@
         android:fontFamily="@font/abel"
         android:gravity="center"
         android:textColor="@color/colorAccent"
-        android:textSize="20sp"
+        android:textSize="24sp"
+        android:text="@string/default_hint"
         app:layout_constraintBottom_toTopOf="@+id/questionBanner"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

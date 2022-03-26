@@ -1,5 +1,6 @@
 package co.stenning.riddler.view;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.Activity;
@@ -10,18 +11,18 @@ import android.view.WindowManager;
 import android.widget.TextView;
 
 import com.google.ads.mediation.admob.AdMobAdapter;
-import com.google.android.gms.ads.AdListener;
+import com.google.android.gms.ads.AdError;
 import com.google.android.gms.ads.AdRequest;
-import com.google.android.gms.ads.InterstitialAd;
-import com.google.android.gms.ads.MobileAds;
+import com.google.android.gms.ads.FullScreenContentCallback;
+import com.google.android.gms.ads.LoadAdError;
+import com.google.android.gms.ads.interstitial.InterstitialAd;
+import com.google.android.gms.ads.interstitial.InterstitialAdLoadCallback;
 
 import co.stenning.riddler.R;
 import co.stenning.riddler.util.PrefManager;
 
 public class CorrectActivity extends AppCompatActivity {
 
-    /* Ads */
-    private PrefManager prefManager;
     private static final int QUESTIONS_BETWEEN_ADS = 1;
     private InterstitialAd correctAd;
     private boolean adShownIfMeant = false;
@@ -33,14 +34,8 @@ public class CorrectActivity extends AppCompatActivity {
         setContentView(R.layout.activity_correct);
 
         //initialise PrefManager to check consent
-        prefManager = new PrefManager(this);
-
-        //initialise mobile ads
-        MobileAds.initialize(this, getString(R.string.app_ad_id));
-
-        //initialise interstitial ad
-        correctAd = new InterstitialAd(this);
-        correctAd.setAdUnitId(getString(R.string.question_interstitial_id));
+        /* Ads */
+        PrefManager prefManager = new PrefManager(this);
 
         //get questions since ad from intent pass to activity
         int questionsSinceAd = getIntent().getIntExtra(QuestionActivity.QUESTIONS_SINCE_AD, 0);
@@ -49,30 +44,63 @@ public class CorrectActivity extends AppCompatActivity {
             if (!prefManager.hasConsentPersonalised()) {
                 Bundle extras = new Bundle();
                 extras.putString("npa", "1");
-
                 adRequest = new AdRequest.Builder().addNetworkExtrasBundle(AdMobAdapter.class, extras).build();
             } else {
                 adRequest = new AdRequest.Builder().build();
             }
-            correctAd.loadAd(adRequest);
 
-            //tell Question Activity add was loaded in order to reset questions since ad
-            correctAd.setAdListener(new AdListener() {
-                @Override
-                public void onAdLoaded() {
-                    super.onAdLoaded();
-                    correctAd.show();
-                }
+            InterstitialAd.load(this, getString(R.string.question_interstitial_id), adRequest, new InterstitialAdLoadCallback() {
+                        @Override
+                        public void onAdFailedToLoad(@NonNull LoadAdError loadAdError) {
+                            super.onAdFailedToLoad(loadAdError);
+                            System.out.println(loadAdError);
+                            correctAd = null;
+                        }
 
-                @Override
-                public void onAdOpened() {
-                    super.onAdOpened();
-                    Intent resultIntent = new Intent();
-                    resultIntent.putExtra(QuestionActivity.AD_WATCHED, true);
-                    setResult(Activity.RESULT_OK, resultIntent);
-                    adShownIfMeant = true;
-                }
-            });
+                        @Override
+                        public void onAdLoaded(@NonNull InterstitialAd interstitialAd) {
+                            super.onAdLoaded(interstitialAd);
+                            correctAd = interstitialAd;
+
+                            correctAd.setFullScreenContentCallback(new FullScreenContentCallback() {
+                                @Override
+                                public void onAdClicked() {
+                                    super.onAdClicked();
+                                }
+
+                                @Override
+                                public void onAdDismissedFullScreenContent() {
+                                    super.onAdDismissedFullScreenContent();
+                                }
+
+                                @Override
+                                public void onAdFailedToShowFullScreenContent(@NonNull AdError adError) {
+                                    super.onAdFailedToShowFullScreenContent(adError);
+                                    adShownIfMeant = true;
+                                }
+
+                                @Override
+                                public void onAdImpression() {
+                                    super.onAdImpression();
+                                }
+
+                                @Override
+                                public void onAdShowedFullScreenContent() {
+                                    super.onAdShowedFullScreenContent();
+                                    correctAd = null;
+
+                                    Intent resultIntent = new Intent();
+                                    resultIntent.putExtra(QuestionActivity.AD_WATCHED, true);
+                                    setResult(Activity.RESULT_OK, resultIntent);
+                                    adShownIfMeant = true;
+                                }
+                            });
+
+                            Activity activityContext = CorrectActivity.this;
+                            correctAd.show(activityContext);
+
+                        }
+                    });
         } else {
             adShownIfMeant = true;
         }

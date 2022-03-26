@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/colorAccent"
+    android:background="@drawable/background_accent"
     android:onClick="clickContinue"
     tools:context=".view.CorrectActivity">
 
@@ -29,7 +29,7 @@
         android:includeFontPadding="false"
         android:onClick="clickContinue"
         android:text="@string/correct_label"
-        android:textColor="@color/colorSecondary"
+        android:textColor="@color/colorPrimaryDark"
         android:textSize="60sp"
         app:layout_constraintBottom_toTopOf="@+id/scoreText"
         app:layout_constraintEnd_toEndOf="parent"
@@ -46,7 +46,7 @@
         android:fontFamily="@font/abel"
         android:onClick="clickContinue"
         android:text="@string/score_label"
-        android:textColor="@color/colorSecondary"
+        android:textColor="@color/colorPrimaryDark"
         android:textSize="30sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

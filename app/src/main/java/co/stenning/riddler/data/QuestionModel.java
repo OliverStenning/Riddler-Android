@@ -16,6 +16,7 @@ import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.io.Writer;
 import java.lang.reflect.Type;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 
 import androidx.lifecycle.MutableLiveData;
@@ -63,7 +64,7 @@ public class QuestionModel extends ViewModel {
             if (playerFile.exists() && !RESET_PLAYER) {
                 try {
                     FileInputStream fileInputStream = context.openFileInput(context.getString(R.string.player_file));
-                    InputStreamReader inputStreamReader = new InputStreamReader(fileInputStream, "UTF-8");
+                    InputStreamReader inputStreamReader = new InputStreamReader(fileInputStream, StandardCharsets.UTF_8);
                     Type type = new TypeToken<Player>() {}.getType();
                     Player tempPlayer = gson.fromJson(inputStreamReader, type);
                     //Reset ad amount so ads aren't shown when the start app again
@@ -86,7 +87,7 @@ public class QuestionModel extends ViewModel {
         try {
             File file = new File(context.getFilesDir(), context.getString(R.string.player_file));
             FileOutputStream fileOutputStream = new FileOutputStream(file);
-            Writer writer = new OutputStreamWriter(fileOutputStream, "UTF-8");
+            Writer writer = new OutputStreamWriter(fileOutputStream, StandardCharsets.UTF_8);
             writer.write(output);
             writer.flush();
         } catch (IOException e) {
@@ -100,7 +101,7 @@ public class QuestionModel extends ViewModel {
             questions = new ArrayList<>();
             try {
                 InputStream inputStream = context.getApplicationContext().getAssets().open(context.getString(R.string.questions_file));
-                InputStreamReader inputStreamReader = new InputStreamReader(inputStream, "UTF-8");
+                InputStreamReader inputStreamReader = new InputStreamReader(inputStream, StandardCharsets.UTF_8);
                 Type type = new TypeToken<ArrayList<Question>>(){}.getType();
                 questions = gson.fromJson(inputStreamReader, type);
             } catch (IOException e) {
@@ -231,6 +232,7 @@ public class QuestionModel extends ViewModel {
     public void updateScore(int score) {
         Player tempPlayer = player.getValue();
         tempPlayer.addScore(score);
+        System.out.println(tempPlayer.getScore());
         player.setValue(tempPlayer);
     }
 
@@ -287,14 +289,8 @@ public class QuestionModel extends ViewModel {
     public boolean shouldReview() {
         Player tempPlayer = player.getValue();
         if (!tempPlayer.isRatingAsked() && tempPlayer.getQuestionNumber() > QUESTIONS_BEFORE_REVIEW) {
-            System.out.println("Review Dialog Launched");
-            System.out.println(tempPlayer.isRatingAsked());
-            System.out.println(tempPlayer.getQuestionNumber());
             return true;
         } else {
-            System.out.println("Review Dialog not Launched");
-            System.out.println(tempPlayer.isRatingAsked());
-            System.out.println(tempPlayer.getQuestionNumber());
             return false;
         }
     }

@@ -2,7 +2,7 @@ package co.stenning.riddler.data;
 
 public class Player {
 
-    private static final int DEFAULT_HINT_AMOUNT = 5;
+    private static final int DEFAULT_HINT_AMOUNT = 3;
     public static final int HINT_REWARD_AMOUNT = 3;
 
 

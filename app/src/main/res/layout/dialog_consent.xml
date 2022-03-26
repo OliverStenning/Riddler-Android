@@ -5,7 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/colorBackground">
+    android:background="@color/colorPrimary">
 
     <TextView
         android:id="@+id/consentTitle"
@@ -34,7 +34,7 @@
         android:fontFamily="@font/abel"
         android:text="@string/consent_description"
         android:textAlignment="center"
-        android:textColor="@color/colorAccentReduced"
+        android:textColor="@color/colorSecondary"
         android:textSize="16sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -51,7 +51,7 @@
         android:fontFamily="@font/abel"
         android:text="@string/consent_meaning"
         android:textAlignment="center"
-        android:textColor="@color/colorAccentReduced"
+        android:textColor="@color/colorSecondary"
         android:textSize="16sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -78,9 +78,10 @@
             android:layout_margin="8dp"
             android:layout_weight="1"
             android:background="@drawable/bg_button_grayed"
+            android:textAllCaps="false"
             android:fontFamily="@font/teko_medium"
             android:text="@string/consent_decline_button"
-            android:textColor="@color/colorSecondary"
+            android:textColor="@color/colorPrimaryDark"
             android:textSize="24sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -93,9 +94,10 @@
             android:layout_margin="8dp"
             android:layout_weight="1"
             android:background="@drawable/bg_button"
+            android:textAllCaps="false"
             android:fontFamily="@font/teko_medium"
             android:text="@string/consent_accept_button"
-            android:textColor="@color/colorSecondary"
+            android:textColor="@color/colorPrimaryDark"
             android:textSize="24sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/consentDescriptionText"/>

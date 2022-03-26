@@ -1,5 +1,6 @@
 package co.stenning.riddler.view;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -13,6 +14,10 @@ import android.widget.TextView;
 import com.google.ads.consent.ConsentInfoUpdateListener;
 import com.google.ads.consent.ConsentInformation;
 import com.google.ads.consent.ConsentStatus;
+import com.google.android.gms.ads.MobileAds;
+import com.google.android.gms.ads.RequestConfiguration;
+import com.google.android.gms.ads.initialization.InitializationStatus;
+import com.google.android.gms.ads.initialization.OnInitializationCompleteListener;
 import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
@@ -26,6 +31,10 @@ import com.muddzdev.styleabletoast.StyleableToast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.DialogFragment;
+
+import java.util.Arrays;
+import java.util.List;
+
 import co.stenning.riddler.R;
 import co.stenning.riddler.util.PrefManager;
 import co.stenning.riddler.dialog.ConsentDialog;
@@ -81,6 +90,20 @@ public class MenuActivity extends AppCompatActivity implements DialogInterface.O
         //update consent status
         updateConsent(false);
 
+        Activity activityContext = MenuActivity.this;
+        ConsentInformation.getInstance(activityContext).addTestDevice("284BA46A17835D2D6A535F3A916AC2F9");
+
+        RequestConfiguration configuration = new RequestConfiguration.Builder().setTestDeviceIds(Arrays.asList("284BA46A17835D2D6A535F3A916AC2F9")).build();
+        MobileAds.setRequestConfiguration(configuration);
+
+        //initialise ads
+        MobileAds.initialize(this, new OnInitializationCompleteListener() {
+            @Override
+            public void onInitializationComplete(InitializationStatus initializationStatus) {
+
+            }
+        });
+
         //create and update settings dialog with correct button states
         settingsDialog = new SettingsDialog();
         settingsDialog.setPlaySignedIn(isSignedIn());
@@ -92,7 +115,14 @@ public class MenuActivity extends AppCompatActivity implements DialogInterface.O
         return GoogleSignIn.getLastSignedInAccount(this) != null;
     }
 
+    private void firstSignIn() {
+        if (prefManager.getAutoSignIn()) {
+            signIn();
+        }
+    }
+
     private void signIn() {
+
         //get the sign in client and configure for games
         signInClient = GoogleSignIn.getClient(this, new GoogleSignInOptions
                 .Builder(GoogleSignInOptions.DEFAULT_GAMES_SIGN_IN).build());
@@ -184,10 +214,13 @@ public class MenuActivity extends AppCompatActivity implements DialogInterface.O
         settingsDialog.setSettingsDialogListener(new SettingsDialog.Listener() {
             @Override
             public void onPlayGamesClicked(DialogFragment dialog) {
-                if (isSignedIn())
+                if (isSignedIn()) {
                     signOut();
-                else
+                    prefManager.setAutoSignIn(false);
+                } else {
                     signIn();
+                    prefManager.setAutoSignIn(true);
+                }
             }
             @Override
             public void onPrivacySettingsClicked(DialogFragment dialog) {
@@ -269,7 +302,8 @@ public class MenuActivity extends AppCompatActivity implements DialogInterface.O
                                 ConsentInformation.getInstance(MenuActivity.this).setConsentStatus(ConsentStatus.PERSONALIZED);
 
                                 //start google play sign in
-                                signIn();
+                                firstSignIn();
+
                             }
 
                             @Override
@@ -277,16 +311,18 @@ public class MenuActivity extends AppCompatActivity implements DialogInterface.O
                                 prefManager.setConsentPersonalised(false);
 
                                 //start google play sign in
-                                signIn();
+                                firstSignIn();
                             }
                         });
+                    } else {
+                        firstSignIn();
                     }
                 }
             }
 
             @Override
             public void onFailedToUpdateConsentInfo(String reason) {
-                System.out.println(reason);
+                firstSignIn();
             }
         });
     }

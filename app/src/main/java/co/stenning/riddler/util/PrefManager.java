@@ -14,6 +14,7 @@ public class PrefManager {
 
     //Shared preferences keys
     private static final String CONSENT_PERSONALISED = "consent-personalised";
+    private static final String AUTO_SIGN_IN = "auto-sign-in";
 
     public PrefManager(Context context) {
         this.context = context;
@@ -27,11 +28,18 @@ public class PrefManager {
     }
 
     public void setConsentPersonalised(boolean consentPersonalised) {
-        editor.putBoolean(CONSENT_PERSONALISED, consentPersonalised);
-        editor.commit();
+        editor.putBoolean(CONSENT_PERSONALISED, consentPersonalised).commit();
     }
     public boolean hasConsentPersonalised() {
         return preferences.getBoolean(CONSENT_PERSONALISED, true);
+    }
+
+    public void setAutoSignIn(boolean autoSignIn) {
+        editor.putBoolean(AUTO_SIGN_IN, autoSignIn).commit();
+    }
+
+    public boolean getAutoSignIn() {
+        return preferences.getBoolean(AUTO_SIGN_IN, true);
     }
 
 }

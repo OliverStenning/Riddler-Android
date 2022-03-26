@@ -4,7 +4,24 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/colorBackground">
+    android:background="@color/colorPrimary">
+
+    <TextView
+        android:id="@+id/consentDeclineTitle"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="24dp"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="16dp"
+        android:fontFamily="@font/abel"
+        android:text="@string/consent_decline_title"
+        android:textAlignment="center"
+        android:textColor="@color/colorAccent"
+        android:textSize="34sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"/>
 
     <TextView
         android:id="@+id/consentDeclineDescription"
@@ -16,11 +33,11 @@
         android:fontFamily="@font/abel"
         android:text="@string/consent_decline_description"
         android:textAlignment="center"
-        android:textColor="@color/colorAccentReduced"
+        android:textColor="@color/colorSecondary"
         android:textSize="16sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"/>
+        app:layout_constraintTop_toBottomOf="@id/consentDeclineTitle"/>
 
     <Button
         android:id="@+id/consentDeclinePrivacyPolicyButton"
@@ -34,7 +51,7 @@
         android:text="@string/riddler_privacy_policy"
         android:textAlignment="center"
         android:textAllCaps="false"
-        android:textColor="@color/colorAccentReduced"
+        android:textColor="@color/colorAccent"
         android:textSize="16sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -61,9 +78,10 @@
             android:layout_margin="8dp"
             android:layout_weight="1"
             android:background="@drawable/bg_button_grayed"
+            android:textAllCaps="false"
             android:fontFamily="@font/teko_medium"
             android:text="@string/back_button"
-            android:textColor="@color/colorSecondary"
+            android:textColor="@color/colorPrimaryDark"
             android:textSize="24sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -76,9 +94,10 @@
             android:layout_margin="8dp"
             android:layout_weight="1"
             android:background="@drawable/bg_button"
+            android:textAllCaps="false"
             android:fontFamily="@font/teko_medium"
             android:text="@string/consent_accept_button"
-            android:textColor="@color/colorSecondary"
+            android:textColor="@color/colorPrimaryDark"
             android:textSize="24sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/consentDescriptionText"/>

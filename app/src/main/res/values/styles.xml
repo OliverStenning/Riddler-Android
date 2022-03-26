@@ -3,9 +3,10 @@
     <!-- Main Game Theme -->
     <style name="GameTheme" parent="Theme.AppCompat.Light.NoActionBar">
         <item name="colorPrimary">@color/colorPrimary</item>
-        <item name="colorPrimaryDark">@color/colorBackground</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
         <item name="android:statusBarColor">@color/colorAccent</item>
+        <item name="android:navigationBarColor">@color/colorPrimary</item>
         <item name="android:windowActionBar">false</item>
         <item name="android:windowNoTitle">true</item>
     </style>
@@ -20,7 +21,7 @@
 
     <!-- Styleable Info Toast -->
     <style name="infoToast">
-        <item name="stTextColor">@color/colorSecondary</item>
+        <item name="stTextColor">@color/colorPrimaryDark</item>
         <item name="stFont">@font/abel</item>
         <item name="stColorBackground">@color/colorAccent</item>
         <item name="stLength">LONG</item>
@@ -29,7 +30,7 @@
 
     <!-- Styleable Error Toast -->
     <style name="errorToast">
-        <item name="stTextColor">@color/colorSecondary</item>
+        <item name="stTextColor">@color/colorPrimaryDark</item>
         <item name="stFont">@font/abel</item>
         <item name="stColorBackground">@color/colorError</item>
         <item name="stLength">LONG</item>

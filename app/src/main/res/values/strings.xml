@@ -14,6 +14,7 @@
     <!--///// QUESTION ACTIVITY /////-->
     <string name="default_question_progress">1/50</string>
     <string name="default_question">What gets wetter the more it dries?</string>
+    <string name="default_hint">Think of materials. \n \n Often found near sinks.</string>
     <string name="skip_button">Skip</string>
     <string name="hints_button">Hints</string>
     <string name="input_hint">Answer</string>
@@ -49,7 +50,7 @@
     <string name="bug_subject">I found a bug in Riddler</string>
 
     <!-- Privacy Policy -->
-    <string name="privacy_policy">https://www.stenning.co/riddler</string>
+    <string name="privacy_policy">https://rddle.me/privacy</string>
 
 
     <!--// CONSENT DIALOG //-->
@@ -63,6 +64,7 @@
         personalized ad experience. You can change your choice anytime in the app settings.</string>
 
     <!-- Decline Dialog-->
+    <string name="consent_decline_title">Non-personalized Ads</string>
     <string name="consent_decline_description">We\'ll partner with Google and use a unique
         identifier on your device to respect your data usage choice. You can change your choice
         anytime in the app settings.</string>
@@ -79,7 +81,7 @@
 
     <!--// HINT DIALOG //-->
     <string name="hint_title">You\'ve run out of Hints!</string>
-    <string name="hint_description">Why not watch an ad to unlock 5 more hints?</string>
+    <string name="hint_description">Why not watch an ad to unlock 3 more hints?</string>
     <string name="watch_ad_button">Watch Ad</string>
     <string name="close_button">Close</string>
     <string name="hints_expended">This question has no more hints.</string>

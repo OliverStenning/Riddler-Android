@@ -1,10 +1,12 @@
 package co.stenning.riddler.view;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 
@@ -22,12 +24,15 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.google.ads.mediation.admob.AdMobAdapter;
+import com.google.android.gms.ads.AdError;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
-import com.google.android.gms.ads.MobileAds;
-import com.google.android.gms.ads.reward.RewardItem;
-import com.google.android.gms.ads.reward.RewardedVideoAd;
-import com.google.android.gms.ads.reward.RewardedVideoAdListener;
+import com.google.android.gms.ads.FullScreenContentCallback;
+import com.google.android.gms.ads.LoadAdError;
+import com.google.android.gms.ads.OnUserEarnedRewardListener;
+import com.google.android.gms.ads.rewarded.RewardItem;
+import com.google.android.gms.ads.rewarded.RewardedAd;
+import com.google.android.gms.ads.rewarded.RewardedAdLoadCallback;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.games.AchievementsClient;
@@ -47,7 +52,7 @@ import co.stenning.riddler.dialog.HintDialog;
 import co.stenning.riddler.dialog.ReviewDialog;
 import co.stenning.riddler.util.Utilities;
 
-public class QuestionActivity extends AppCompatActivity implements RewardedVideoAdListener {
+public class QuestionActivity extends AppCompatActivity {
 
     private static final int CORRECT_ACTIVITY = 1;
 
@@ -77,7 +82,7 @@ public class QuestionActivity extends AppCompatActivity implements RewardedVideo
     private PrefManager prefManager;
     public static final String QUESTIONS_SINCE_AD = "questions-since-ad";
     public static final String AD_WATCHED = "ad-watched";
-    private RewardedVideoAd rewardedVideoAd;
+    private RewardedAd rewardedAd;
     private static String AD_TYPE;
     private static final String AD_HINT = "HINT";
     private static final String AD_SKIP = "SKIP";
@@ -99,7 +104,7 @@ public class QuestionActivity extends AppCompatActivity implements RewardedVideo
         hintText = findViewById(R.id.hintText);
         questionBanner = findViewById(R.id.questionBanner);
 
-        questionBanner.setVisibility(View.INVISIBLE);
+        skipButton.setVisibility(View.GONE);
 
         //override keyboard enter method
         answerInput.setOnEditorActionListener((v, actionId, event) -> {
@@ -131,7 +136,7 @@ public class QuestionActivity extends AppCompatActivity implements RewardedVideo
 
                 Intent intent = new Intent(this, CompletionActivity.class);
                 intent.putExtra(SCORE_EXTRA, questionModel.getScore());
-                startActivity(new Intent(context, CompletionActivity.class));
+                startActivity(intent);
             } else {
                 updateUI(player);
             }
@@ -145,9 +150,6 @@ public class QuestionActivity extends AppCompatActivity implements RewardedVideo
         //initialise PrefManager for checking consent
         prefManager = new PrefManager(this);
 
-        //initialise mobile ads
-        MobileAds.initialize(this, getString(R.string.app_ad_id));
-
         //load banner ad
         AdRequest adRequest;
         if (!prefManager.hasConsentPersonalised()) {
@@ -160,12 +162,6 @@ public class QuestionActivity extends AppCompatActivity implements RewardedVideo
             adRequest = new AdRequest.Builder().build();
         }
         questionBanner.loadAd(adRequest);
-
-        //get rewarded video ad instance
-        rewardedVideoAd = MobileAds.getRewardedVideoAdInstance(this);
-
-        //set listener for video ad to activity implemented listener
-        rewardedVideoAd.setRewardedVideoAdListener(this);
 
         //load rewarded video ad
         loadVideoAd();
@@ -236,18 +232,22 @@ public class QuestionActivity extends AppCompatActivity implements RewardedVideo
             //update score and submit to leaderboard
             int questionScore = updateScore();
 
-            //log question event
-            Player tempPlayer = questionModel.getPlayer().getValue();
-            int time = (int) ((System.nanoTime() - tempPlayer.getQuestionTimeStarted()) / 1000000000);
-            Utilities.questionLog(firebaseAnalytics, tempPlayer.getQuestionNumber(),
-                    false,
-                    tempPlayer.getQuestionHintsUsed(),
-                    tempPlayer.getQuestionIncorrectGuesses() + 1, //add one for correct guess
-                    questionScore,
-                    time);
+            //only do play games updates if signed in
+            if (isSignedIn()) {
 
-            //update other misc achievements
-            updateOtherAchievements();
+                //log question event
+                Player tempPlayer = questionModel.getPlayer().getValue();
+                int time = (int) ((System.nanoTime() - tempPlayer.getQuestionTimeStarted()) / 1000000000);
+                Utilities.questionLog(firebaseAnalytics, tempPlayer.getQuestionNumber(),
+                        false,
+                        tempPlayer.getQuestionHintsUsed(),
+                        tempPlayer.getQuestionIncorrectGuesses() + 1, //add one for correct guess
+                        questionScore,
+                        time);
+
+                //update other misc achievements
+                updateOtherAchievements();
+            }
 
             //pass question score to Correct Activity
             startCorrectActivity(questionScore);
@@ -332,7 +332,7 @@ public class QuestionActivity extends AppCompatActivity implements RewardedVideo
         hintButton.setText(this.getString(R.string.hints_button) + "  " + player.getHints());
 
         if (player.getHints() == 0) {
-            if (!rewardedVideoAd.isLoaded()) {
+            if (rewardedAd == null) {
                 hintButton.setEnabled(false);
             }
         }
@@ -354,6 +354,7 @@ public class QuestionActivity extends AppCompatActivity implements RewardedVideo
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == CORRECT_ACTIVITY) {
             //move player to next question
             questionModel.incrementPlayer();
@@ -376,6 +377,7 @@ public class QuestionActivity extends AppCompatActivity implements RewardedVideo
                         // open store page
                         Utilities.openReviewPage(QuestionActivity.this);
                     }
+
                     @Override
                     public void onNeverClicked(DialogFragment dialog) {
                         // close dialog
@@ -398,16 +400,96 @@ public class QuestionActivity extends AppCompatActivity implements RewardedVideo
 
     /* Ad Methods */
     private void displayVideoAd(String adType) {
-        if (rewardedVideoAd.isLoaded()) {
+        if (rewardedAd != null) {
+
+            //get rewarded video ad instance
+            rewardedAd.setFullScreenContentCallback(new FullScreenContentCallback() {
+                @Override
+                public void onAdShowedFullScreenContent() {
+                    // Called when ad is shown.
+                }
+
+                @Override
+                public void onAdFailedToShowFullScreenContent(AdError adError) {
+                    // Called when ad fails to show.
+                }
+
+                @Override
+                public void onAdDismissedFullScreenContent() {
+                    // Called when ad is dismissed.
+                    // Set the ad reference to null so you don't show the ad a second time.
+                    rewardedAd = null;
+                    loadVideoAd();
+                }
+            });
+
             AD_TYPE = adType;
-            rewardedVideoAd.show();
+
+            Activity activityContext = QuestionActivity.this;
+            rewardedAd.show(activityContext, new OnUserEarnedRewardListener() {
+                @Override
+                public void onUserEarnedReward(@NonNull RewardItem rewardItem) {
+                    Player tempPlayer;
+                    switch (AD_TYPE) {
+                        case (AD_HINT):
+                            //log get hint event
+                            tempPlayer = questionModel.getPlayer().getValue();
+                            Utilities.getHintLog(firebaseAnalytics, tempPlayer.getQuestionNumber(), tempPlayer.getTotalHintsUsed());
+
+                            //give the player hints
+                            if (isSignedIn())
+                                achievementsClient.unlock(getString(R.string.achievement_more_help_please));
+                            questionModel.addHints(Player.HINT_REWARD_AMOUNT);
+                            break;
+                        case(AD_SKIP):
+                            //log skip event
+                            tempPlayer = questionModel.getPlayer().getValue();
+                            int time = (int) ((System.nanoTime() - tempPlayer.getQuestionTimeStarted()) / 1000000000);
+                            Utilities.questionLog(firebaseAnalytics, tempPlayer.getQuestionNumber(), true,
+                                    tempPlayer.getQuestionHintsUsed(),
+                                    tempPlayer.getQuestionIncorrectGuesses(), 0, time);
+
+                            //set question score to zero as question skipped
+                            if (isSignedIn())
+                                achievementsClient.unlock(getString(R.string.achievement_trying_is_for_losers));
+                            questionModel.incrementTotalSkips();
+                            startCorrectActivity(0);
+                            break;
+
+                    }
+                    AD_TYPE = "";
+                }
+            });
+
+
         } else {
             StyleableToast.makeText(this, getString(R.string.ad_load_failed), R.style.errorToast).show();
         }
     }
 
     private void loadVideoAd() {
-        rewardedVideoAd.loadAd(getString(R.string.rewarded_video_id), new AdRequest.Builder().build());
+        System.out.println("Ad: Load request");
+        AdRequest adRequest = new AdRequest.Builder().build();
+
+        RewardedAd.load(this, getString(R.string.rewarded_video_id),
+                adRequest, new RewardedAdLoadCallback() {
+                    @Override
+                    public void onAdFailedToLoad(@NonNull LoadAdError loadAdError) {
+                        rewardedAd = null;
+                        System.out.println("Ad: Failed to load");
+                        System.out.println(loadAdError);
+                    }
+
+                    @Override
+                    public void onAdLoaded(@NonNull RewardedAd ad) {
+                        System.out.println("Ad: Loaded");
+                        rewardedAd = ad;
+                        skipButton.setEnabled(true);
+                        hintButton.setEnabled(true);
+
+                    }
+                });
+
         disableButtons();
     }
 
@@ -417,72 +499,4 @@ public class QuestionActivity extends AppCompatActivity implements RewardedVideo
             hintButton.setEnabled(false);
     }
 
-    @Override
-    public void onRewardedVideoAdLoaded() {
-        skipButton.setEnabled(true);
-        hintButton.setEnabled(true);
-    }
-
-    @Override
-    public void onRewardedVideoAdOpened() {
-
-    }
-
-    @Override
-    public void onRewardedVideoStarted() {
-
-    }
-
-    @Override
-    public void onRewardedVideoAdClosed() {
-        loadVideoAd();
-    }
-
-    @Override
-    public void onRewarded(RewardItem rewardItem) {
-        Player tempPlayer;
-        switch (AD_TYPE) {
-            case (AD_HINT):
-                //log get hint event
-                tempPlayer = questionModel.getPlayer().getValue();
-                Utilities.getHintLog(firebaseAnalytics, tempPlayer.getQuestionNumber(), tempPlayer.getTotalHintsUsed());
-
-                //give the player hints
-                if (isSignedIn())
-                    achievementsClient.unlock(getString(R.string.achievement_more_help_please));
-                questionModel.addHints(Player.HINT_REWARD_AMOUNT);
-                break;
-            case(AD_SKIP):
-                //log skip event
-                tempPlayer = questionModel.getPlayer().getValue();
-                int time = (int) ((System.nanoTime() - tempPlayer.getQuestionTimeStarted()) / 1000000000);
-                Utilities.questionLog(firebaseAnalytics, tempPlayer.getQuestionNumber(), true,
-                        tempPlayer.getQuestionHintsUsed(),
-                        tempPlayer.getQuestionIncorrectGuesses(), 0, time);
-
-                //set question score to zero as question skipped
-                if (isSignedIn())
-                    achievementsClient.unlock(getString(R.string.achievement_trying_is_for_losers));
-                questionModel.incrementTotalSkips();
-                startCorrectActivity(0);
-                break;
-
-        }
-        AD_TYPE = "";
-    }
-
-    @Override
-    public void onRewardedVideoAdLeftApplication() {
-
-    }
-
-    @Override
-    public void onRewardedVideoAdFailedToLoad(int i) {
-        loadVideoAd();
-    }
-
-    @Override
-    public void onRewardedVideoCompleted() {
-
-    }
 }

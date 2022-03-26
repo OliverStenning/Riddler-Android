@@ -1,11 +1,46 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
+  <component name="CMakeSettings">
+    <configurations>
+      <configuration PROFILE_NAME="Debug" CONFIG_NAME="Debug" />
+    </configurations>
+  </component>
+  <component name="DesignSurface">
+    <option name="filePathToZoomLevelMap">
+      <map>
+        <entry key="..\:/Users/Oliver/Programming/Android Studio Projects/Riddler/app/src/main/res/drawable/bg_button.xml" value="0.5661458333333333" />
+        <entry key="..\:/Users/Oliver/Programming/Android Studio Projects/Riddler/app/src/main/res/drawable/bg_button_grayed.xml" value="0.5661458333333333" />
+        <entry key="..\:/Users/Oliver/Programming/Android Studio Projects/Riddler/app/src/main/res/drawable/bg_edittext.xml" value="0.34427083333333336" />
+        <entry key="..\:/Users/Oliver/Programming/Android Studio Projects/Riddler/app/src/main/res/drawable/ic_arrow_back_36dp.xml" value="0.5661458333333333" />
+        <entry key="..\:/Users/Oliver/Programming/Android Studio Projects/Riddler/app/src/main/res/drawable/ic_close_36dp.xml" value="0.5661458333333333" />
+        <entry key="..\:/Users/Oliver/Programming/Android Studio Projects/Riddler/app/src/main/res/drawable/ic_enter_36dp.xml" value="0.5661458333333333" />
+        <entry key="..\:/Users/Oliver/Programming/Android Studio Projects/Riddler/app/src/main/res/drawable/ic_launcher_background.xml" value="0.5661458333333333" />
+        <entry key="..\:/Users/Oliver/Programming/Android Studio Projects/Riddler/app/src/main/res/drawable/ic_launcher_foreground.xml" value="0.5661458333333333" />
+        <entry key="..\:/Users/Oliver/Programming/Android Studio Projects/Riddler/app/src/main/res/drawable/ic_medal_36dp.xml" value="0.5661458333333333" />
+        <entry key="..\:/Users/Oliver/Programming/Android Studio Projects/Riddler/app/src/main/res/drawable/ic_settings_36dp.xml" value="0.5661458333333333" />
+        <entry key="..\:/Users/Oliver/Programming/Android Studio Projects/Riddler/app/src/main/res/drawable/ic_stats_36dp.xml" value="0.5661458333333333" />
+        <entry key="..\:/Users/Oliver/Programming/Android Studio Projects/Riddler/app/src/main/res/drawable/ic_trophy_36dp.xml" value="0.5661458333333333" />
+        <entry key="..\:/Users/Oliver/Programming/Android Studio Projects/Riddler/app/src/main/res/drawable/outline_settings_24.xml" value="0.21743421052631579" />
+        <entry key="..\:/Users/Oliver/Programming/Android Studio Projects/Riddler/app/src/main/res/drawable/pb_progress.xml" value="0.5661458333333333" />
+        <entry key="..\:/Users/Oliver/Programming/Android Studio Projects/Riddler/app/src/main/res/layout/activity_completion.xml" value="0.328125" />
+        <entry key="..\:/Users/Oliver/Programming/Android Studio Projects/Riddler/app/src/main/res/layout/activity_correct.xml" value="0.3451086956521739" />
+        <entry key="..\:/Users/Oliver/Programming/Android Studio Projects/Riddler/app/src/main/res/layout/activity_menu.xml" value="0.25" />
+        <entry key="..\:/Users/Oliver/Programming/Android Studio Projects/Riddler/app/src/main/res/layout/activity_question.xml" value="0.33" />
+        <entry key="..\:/Users/Oliver/Programming/Android Studio Projects/Riddler/app/src/main/res/layout/dialog_consent.xml" value="0.55" />
+        <entry key="..\:/Users/Oliver/Programming/Android Studio Projects/Riddler/app/src/main/res/layout/dialog_consent_decline.xml" value="0.328125" />
+        <entry key="..\:/Users/Oliver/Programming/Android Studio Projects/Riddler/app/src/main/res/layout/dialog_consent_more_info.xml" value="0.33" />
+        <entry key="..\:/Users/Oliver/Programming/Android Studio Projects/Riddler/app/src/main/res/layout/dialog_hint.xml" value="0.328125" />
+        <entry key="..\:/Users/Oliver/Programming/Android Studio Projects/Riddler/app/src/main/res/layout/dialog_review.xml" value="0.328125" />
+        <entry key="..\:/Users/Oliver/Programming/Android Studio Projects/Riddler/app/src/main/res/layout/dialog_settings.xml" value="0.328125" />
+      </map>
+    </option>
+  </component>
   <component name="NullableNotNullManager">
     <option name="myDefaultNullable" value="android.support.annotation.Nullable" />
-    <option name="myDefaultNotNull" value="android.support.annotation.NonNull" />
+    <option name="myDefaultNotNull" value="androidx.annotation.RecentlyNonNull" />
     <option name="myNullables">
       <value>
-        <list size="7">
+        <list size="14">
           <item index="0" class="java.lang.String" itemvalue="org.jetbrains.annotations.Nullable" />
           <item index="1" class="java.lang.String" itemvalue="javax.annotation.Nullable" />
           <item index="2" class="java.lang.String" itemvalue="javax.annotation.CheckForNull" />
@@ -13,23 +48,41 @@
           <item index="4" class="java.lang.String" itemvalue="android.support.annotation.Nullable" />
           <item index="5" class="java.lang.String" itemvalue="androidx.annotation.Nullable" />
           <item index="6" class="java.lang.String" itemvalue="androidx.annotation.RecentlyNullable" />
+          <item index="7" class="java.lang.String" itemvalue="org.checkerframework.checker.nullness.qual.Nullable" />
+          <item index="8" class="java.lang.String" itemvalue="org.checkerframework.checker.nullness.compatqual.NullableDecl" />
+          <item index="9" class="java.lang.String" itemvalue="org.checkerframework.checker.nullness.compatqual.NullableType" />
+          <item index="10" class="java.lang.String" itemvalue="com.android.annotations.Nullable" />
+          <item index="11" class="java.lang.String" itemvalue="org.eclipse.jdt.annotation.Nullable" />
+          <item index="12" class="java.lang.String" itemvalue="io.reactivex.annotations.Nullable" />
+          <item index="13" class="java.lang.String" itemvalue="io.reactivex.rxjava3.annotations.Nullable" />
         </list>
       </value>
     </option>
     <option name="myNotNulls">
       <value>
-        <list size="6">
+        <list size="14">
           <item index="0" class="java.lang.String" itemvalue="org.jetbrains.annotations.NotNull" />
           <item index="1" class="java.lang.String" itemvalue="javax.annotation.Nonnull" />
           <item index="2" class="java.lang.String" itemvalue="edu.umd.cs.findbugs.annotations.NonNull" />
           <item index="3" class="java.lang.String" itemvalue="android.support.annotation.NonNull" />
           <item index="4" class="java.lang.String" itemvalue="androidx.annotation.NonNull" />
           <item index="5" class="java.lang.String" itemvalue="androidx.annotation.RecentlyNonNull" />
+          <item index="6" class="java.lang.String" itemvalue="org.checkerframework.checker.nullness.qual.NonNull" />
+          <item index="7" class="java.lang.String" itemvalue="org.checkerframework.checker.nullness.compatqual.NonNullDecl" />
+          <item index="8" class="java.lang.String" itemvalue="org.checkerframework.checker.nullness.compatqual.NonNullType" />
+          <item index="9" class="java.lang.String" itemvalue="com.android.annotations.NonNull" />
+          <item index="10" class="java.lang.String" itemvalue="org.eclipse.jdt.annotation.NonNull" />
+          <item index="11" class="java.lang.String" itemvalue="io.reactivex.annotations.NonNull" />
+          <item index="12" class="java.lang.String" itemvalue="io.reactivex.rxjava3.annotations.NonNull" />
+          <item index="13" class="java.lang.String" itemvalue="lombok.NonNull" />
         </list>
       </value>
     </option>
   </component>
-  <component name="ProjectRootManager" version="2" languageLevel="JDK_1_8" default="true" project-jdk-name="1.8" project-jdk-type="JavaSDK">
-    <output url="file://$PROJECT_DIR$/out" />
+  <component name="ProjectRootManager" version="2" languageLevel="JDK_11" default="true" project-jdk-name="11" project-jdk-type="JavaSDK">
+    <output url="file://$PROJECT_DIR$/build/classes" />
+  </component>
+  <component name="ProjectType">
+    <option name="id" value="Android" />
   </component>
 </project>

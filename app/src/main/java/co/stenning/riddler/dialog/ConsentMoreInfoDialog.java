@@ -43,10 +43,8 @@ public class ConsentMoreInfoDialog extends DialogFragment {
 
 
         List<AdProvider> adProviders = ConsentInformation.getInstance(getActivity()).getAdProviders();
-        System.out.println("AdProvider Size: " + adProviders.size());
         ListView adProviderList = dialogView.findViewById(R.id.adProviderList);
         AdProviderAdapter adapter = new AdProviderAdapter(getActivity(), new ArrayList<>(adProviders));
-        System.out.println("Adapter Size: " + adapter.getCount());
         adProviderList.setAdapter(adapter);
         adProviderList.setOnItemClickListener((adapterView, view, position, id) -> {
             Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(adProviders.get(position).getPrivacyPolicyUrlString()));

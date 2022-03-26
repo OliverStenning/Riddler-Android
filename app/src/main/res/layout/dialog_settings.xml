@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/colorBackground">
+    android:background="@color/colorPrimary">
 
     <TextView
         android:id="@+id/settingsTitle"
@@ -62,7 +62,7 @@
         android:paddingEnd="16dp"
         android:text="@string/play_sign_out_button"
         android:textAllCaps="false"
-        android:textColor="@color/colorSecondary"
+        android:textColor="@color/colorPrimaryDark"
         android:textSize="20sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/settingsTitle" />
@@ -94,7 +94,7 @@
         android:paddingEnd="16dp"
         android:text="@string/privacy_settings_button"
         android:textAllCaps="false"
-        android:textColor="@color/colorSecondary"
+        android:textColor="@color/colorPrimaryDark"
         android:textSize="20sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/playGamesButton" />
@@ -126,7 +126,7 @@
         android:paddingEnd="16dp"
         android:text="@string/bug_report_button"
         android:textAllCaps="false"
-        android:textColor="@color/colorSecondary"
+        android:textColor="@color/colorPrimaryDark"
         android:textSize="20sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/privacySettingsButton" />
@@ -159,7 +159,7 @@
         android:paddingEnd="16dp"
         android:text="@string/privacy_policy_button"
         android:textAllCaps="false"
-        android:textColor="@color/colorSecondary"
+        android:textColor="@color/colorPrimaryDark"
         android:textSize="20sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/bugReportButton" />
@@ -192,7 +192,7 @@
         android:paddingEnd="16dp"
         android:text="@string/review_button"
         android:textAllCaps="false"
-        android:textColor="@color/colorSecondary"
+        android:textColor="@color/colorPrimaryDark"
         android:textSize="20sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
